@@ -10,11 +10,15 @@ class SignInController extends Controller
     public function __invoke(Request $request)
     {
 
-        // $credentials ={ $req->email , $req->password};
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
         $credentials = $request->only('email', 'password');
         if (!$token = auth()->attempt($credentials)) {
             return response('not authenticated', 401);
         }
-        return response()->json(['token'=>$token, 'msg'=>'login successful']);
+        return response()->json(['token' => $token, 'msg' => 'login successful']);
     }
 }

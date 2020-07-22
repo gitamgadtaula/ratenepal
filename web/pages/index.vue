@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <button @click="logout"> Logout </button>
+
+
     <div>
       <Logo />
       <h1 class="title">
@@ -28,7 +31,25 @@
 </template>
 
 <script>
-export default {}
+export default {
+  methods:{
+    logout(){
+      localStorage.removeItem('userToken')
+      this.checkAuth()
+    },
+    checkAuth(){
+      console.log(localStorage.getItem('userToken'));   
+       if (localStorage.getItem('usertoken')===null){
+        this.$router.push('/login') 
+        console.log(true)
+  }
+}
+  },
+  created(){
+//  this.checkAuth()
+  }
+   
+}
 </script>
 
 <style>
