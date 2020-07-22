@@ -9,7 +9,7 @@
 
 ## About this project 
 
-Since we have used modular approach, our User authentication model lives inside User module. So, we need to make change the users model of providers inside 'app/auth.php'
+Since we have used modular approach using laravel Module package, our User authentication model lives inside User module. So, we need to make change the users model of providers inside 'app/auth.php'
 
     'providers' => [
     'users' => [
