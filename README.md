@@ -1,5 +1,7 @@
-# ratenepal
+# Rate Nepal 
 
-## Under construction 
-### This project is under construction. I have created this project for the purpose of self learning as well as an idea that randomly popped in my head
-I have used Mysql-Laravel-Vue-PHP stack for this project. 
+### Under construction 
+### This is a project under construction. 
+It uses Mysql-Laravel-Vue-PHP stack. 
+The frontend lives inside the web directory and the backend resides inside api directory. 
+
