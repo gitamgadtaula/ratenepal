@@ -52,5 +52,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    //relation with other modules
+
+    public function ratings(){
+        return $this->hasMany(\Modules\Feedback\Entities\Rating::class);
+    }
+
 }
 
