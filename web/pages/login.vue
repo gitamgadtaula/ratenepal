@@ -2,12 +2,17 @@
   <div>
     <div class="container" id="parent">
       <div class="login-container">
-        <img src="~/assets/ratenepal4.png" alt="">
+        <img src="~/assets/ratenepal4.png" alt="" />
         <div>
           <a-form>
             <a-form-item>
               <p class="input-text">Username</p>
-              <a-input id="email" size="large" v-model="form.email" placeholder="please enter email" />
+              <a-input
+                id="email"
+                size="large"
+                v-model="form.email"
+                placeholder="please enter email"
+              />
               <a-icon slot="prefix" type="user" />
             </a-form-item>
             <a-form-item>
@@ -90,54 +95,14 @@ export default {
   min-height: 100vh;
   background-position: right;
 }
-.login-section {
-  margin: auto;
-  vertical-align: center;
-  text-align: center;
-  background-color: white;
-  transition: visibility 0s 2s, opacity 2s linear;
-}
 img {
   width: 100px;
-}
-.login-head {
-  font-size: 18px;
-  /*border-bottom: 1px solid #e6e6e6;*/
-  padding-bottom: 10px;
-}
-.survey-image {
-  width: 100%;
-  margin: auto;
-  opacity: 0.5;
-}
-.login-content {
-  overflow: hidden;
-  border: 1px solid #f7f8fb;
-  background-color: white;
-  box-shadow: 38px 15px 30px #d6d6d6;
-  position: relative;
-  width: 400px;
-  max-width: 100%;
-  padding: 30px 35px 20px;
-  margin: 130px auto;
-  overflow: hidden;
-  -webkit-box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3),
-    0 15px 12px rgba(0, 0, 0, 0.22);
-  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
-}
-
-.test {
-  background-size: cover;
-  height: 100vh;
-  opacity: 0.6;
-  background-image: linear-gradient(-90deg, #ffffff, #e8f6ff);
 }
 
 .ant-btn-primary {
   box-shadow: none;
 }
 .other-links span {
-
   font-size: 12px;
 }
 .other-links {

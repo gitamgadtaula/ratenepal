@@ -15,8 +15,8 @@ use Illuminate\Http\Request;
 */
 
 
-Route::group(['middleware' => 'auth'], function()
-{
-    Route::post('rating/post/{shop_id}','RatingController@postRating');
-    Route::get('rating/get/{shop_id}','RatingController@getUserRatingOnShop');
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('rating/post/{shop_id}', 'RatingController@postRating');
+    Route::get('rating/getuserrating/{shop_id}', 'RatingController@getUserRatingOnShop');
 });
+Route::get('rating/get/{shop_id}', 'RatingController@getAllRatingOfShop');

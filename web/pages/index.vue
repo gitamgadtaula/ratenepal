@@ -1,94 +1,69 @@
 <template>
-  <div class="container">
-    <button @click="logout"> Logout </button>
-
-
-    <div>
-      <Logo />
-      <h1 class="title">
-        frontend
-      </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+  <div>
+    <div class="shop-container" v-for="(item, index) in shopData" :key="index">
+      <div class="shop-card">
+        <div class="shop-title">
+          <p style="text-align:center;">{{ item.name.toUpperCase() }}</p>
+        </div>
+        <div class="shop-image">
+          <img
+            src="@/assets/shops/logo.png"
+            style="width:200px;height:140px;"
+          />
+        </div>
+        <div class="shop-footer">
+          <a-icon type="environment" /> {{ item.location.toUpperCase() }} | <br />
+          <span @click="getRatingOnShop(index)"> Get Rating </span> ||
+          {{ shopRating }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  methods:{
-    logout(){
-      localStorage.removeItem('userToken')
-      this.checkAuth()
-    },
-    checkAuth(){
-      console.log(localStorage.getItem('userToken'));   
-       if (localStorage.getItem('usertoken')===null){
-        this.$router.push('/login') 
-        console.log(true)
-  }
-}
+  data() {
+    return {
+      shopData: "",
+      shopRating: ""
+    };
   },
-  created(){
-//  this.checkAuth()
+  methods: {
+    getAllShop() {
+      axios.get("http://127.0.0.1:8000/api/shop/getall").then(response => {
+        console.log(response);
+        this.shopData = response.data.data;
+      });
+    },
+    getRatingOnShop(shop_id) {
+      axios
+        .get(`http://127.0.0.1:8000/api/rating/get/${shop_id}`)
+        .then(response => {
+          console.log(response);
+          this.shopRating = response.data;
+        });
+    }
+  },
+  created() {
+    this.getAllShop();
   }
-   
-}
+};
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+.shop-container {
+  display: inline-block;
+  background-color: black;
 }
-
-.title {
-  font-family:
-    'Quicksand',
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+.shop-card {
+  background-color: #f3d250;
+  padding: 10px;
+  border: 1px solid #252525;
+  max-width: 300px;
+  border-radius: 5px;
+  margin: 12px 4px 6px 12px;
+  color: #000000;
 }
 </style>

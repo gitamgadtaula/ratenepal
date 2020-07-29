@@ -16,7 +16,7 @@ class Rating extends Model
 
     public function user()
     {
-      return $this->belongsTo(\Modules\Shop\Entities\User::class);
+      return $this->belongsTo(\Modules\User\Entities\User::class);
     }
 
 

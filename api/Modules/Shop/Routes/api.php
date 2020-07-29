@@ -21,5 +21,6 @@ Route::group(['prefix' => 'shop',  'middleware' => 'auth'], function()
 {
     //All the routes that belongs to the group goes here
     Route::post('create','ShopController@createShop');
-    Route::get('getall','ShopController@fetchShop');
+    
 });
+Route::get('shop/getall','ShopController@fetchShop');
