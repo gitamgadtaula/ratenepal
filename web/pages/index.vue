@@ -12,9 +12,9 @@
           />
         </div>
         <div class="shop-footer">
-          <a-icon type="environment" /> {{ item.location.toUpperCase() }} | <br />
-          <span @click="getRatingOnShop(index)"> Get Rating </span> ||
-          {{ shopRating }}
+          <a-icon type="environment"  theme="twoTone" two-tone-color="#eb2f96" /> {{ item.location.toUpperCase() }}
+          <br />
+          <a-icon type="star" theme="twoTone" two-tone-color="#eb2f96" :style="{ fontSize: '18px'}" /> {{ item.ratings | getRating }}
         </div>
       </div>
     </div>
@@ -33,17 +33,21 @@ export default {
   methods: {
     getAllShop() {
       axios.get("http://127.0.0.1:8000/api/shop/getall").then(response => {
-        console.log(response);
-        this.shopData = response.data.data;
+        console.log(response.data);
+        this.shopData = response.data;
       });
-    },
-    getRatingOnShop(shop_id) {
-      axios
-        .get(`http://127.0.0.1:8000/api/rating/get/${shop_id}`)
-        .then(response => {
-          console.log(response);
-          this.shopRating = response.data;
-        });
+    }
+  },
+  computed: {},
+  filters: {
+    getRating(value) {
+      console.log(value);
+      const length = value.length;
+      if (length === 0) {
+        return "not rated yet";
+      }
+      const sum = value.reduce((acc, item) => acc + item.rating, 0);
+      return (sum / length).toFixed(2);//round upto 2 decimal
     }
   },
   created() {
