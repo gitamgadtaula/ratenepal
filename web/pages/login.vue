@@ -1,5 +1,7 @@
 <template>
   <div>
+    {{ this.$auth.user.name }}
+    <hr />
     <div class="container" id="parent">
       <div class="login-container">
         <img src="~/assets/ratenepal4.png" alt="" />
@@ -58,8 +60,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   data() {
     return {
@@ -71,18 +71,33 @@ export default {
     };
   },
   methods: {
-    login() {
-      axios
-        .post("http://127.0.0.1:8000/api/auth/login", this.form)
-        .then(response => {
-          console.log(response);
-          this.token = response.data.token;
-          localStorage.setItem("userToken", this.token);
-          this.$router.push("/");
-        })
-        .catch(err => {
-          console.log(err);
+    async login() {
+      try {
+        await this.$auth.loginWith("local", {
+          data: {
+            email: this.form.email,
+            password: this.form.password
+          }
         });
+        this.$router.push("/");
+      } catch (e) {
+        this.error = e.response.data.message;
+      }
+      // this.$axios
+      //   .post("/api/auth/login", this.form)
+      //   .then(response => {
+
+      //     this.$router.push("/");
+      //     this.$auth.loginWith('local', {
+      //     data: {
+      //       email: this.form.email,
+      //       password: this.form.password
+      //     },
+      //   })
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   });
     }
   }
 };

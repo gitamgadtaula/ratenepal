@@ -1,44 +1,67 @@
 <template>
   <div>
+    
+    <a-row type="flex" justify="end">
+      <a-button size="large" type="primary"
+        ><a-icon type="form" /> Create a shop
+      </a-button>
+    </a-row>
+
     <div class="shop-container" v-for="(item, index) in shopData" :key="index">
-      <div class="shop-card">
-        <div class="shop-title">
-          <p style="text-align:center;">{{ item.name.toUpperCase() }}</p>
+      <nuxt-link :to="shopLink">
+        <div class="shop-card" @click="generateLink(item.id)">
+          <div class="shop-title">
+            <p style="text-align:center;">{{ item.name.toUpperCase() }}</p>
+          </div>
+          <div class="shop-image">
+            <img
+              src="@/assets/shops/logo.png"
+              style="width:200px;height:140px;"
+            />
+          </div>
+          <div class="shop-footer">
+            <a-icon
+              type="environment"
+              theme="twoTone"
+              two-tone-color="#eb2f96"
+            />
+            {{ item.location.toUpperCase() }}
+            <br />
+            <a-icon
+              type="star"
+              theme="twoTone"
+              two-tone-color="#eb2f96"
+              :style="{ fontSize: '18px' }"
+            />
+            {{ item.ratings | getRating }}
+          </div>
         </div>
-        <div class="shop-image">
-          <img
-            src="@/assets/shops/logo.png"
-            style="width:200px;height:140px;"
-          />
-        </div>
-        <div class="shop-footer">
-          <a-icon type="environment"  theme="twoTone" two-tone-color="#eb2f96" /> {{ item.location.toUpperCase() }}
-          <br />
-          <a-icon type="star" theme="twoTone" two-tone-color="#eb2f96" :style="{ fontSize: '18px'}" /> {{ item.ratings | getRating }}
-        </div>
-      </div>
+      </nuxt-link>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
 export default {
+  auth: true,
   data() {
     return {
       shopData: "",
-      shopRating: ""
+      shopRating: "",
+      shopLink: ""
     };
   },
   methods: {
     getAllShop() {
-      axios.get("http://127.0.0.1:8000/api/shop/getall").then(response => {
-        console.log(response.data);
+      this.$axios.get("/shop/getall").then(response => {
         this.shopData = response.data;
       });
+    },
+    generateLink(param) {
+      this.shopLink = `/shop/${param}`;
     }
   },
-  computed: {},
+
   filters: {
     getRating(value) {
       console.log(value);
@@ -47,7 +70,7 @@ export default {
         return "not rated yet";
       }
       const sum = value.reduce((acc, item) => acc + item.rating, 0);
-      return (sum / length).toFixed(2);//round upto 2 decimal
+      return (sum / length).toFixed(2); //round upto 2 decimal
     }
   },
   created() {
@@ -56,18 +79,19 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .shop-container {
+  margin-top: 5px;
   display: inline-block;
-  background-color: black;
+  width:260px;
 }
 .shop-card {
-  background-color: #f3d250;
+  background: whitesmoke;
   padding: 10px;
-  border: 1px solid #252525;
-  max-width: 300px;
+  border: 1px solid #491c9b;
+  /* max-width: 320px; */
   border-radius: 5px;
-  margin: 12px 4px 6px 12px;
+  margin: 12px 6px 6px 12px;
   color: #000000;
 }
 </style>

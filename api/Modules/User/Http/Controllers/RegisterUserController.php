@@ -35,12 +35,7 @@ class RegisterUserController extends Controller
      */
     public function store(RegisterUserRequest $request)
     {
-        // $user = new User;
-        // $user->name = $request->name;
-        // $user->email = $request->email;
-        // $user->password = $request->password;
-        // $user->save();
-         $user=User::create([
+        $user=User::create([
             'name'=>$request->name,
             'email'=>$request->email,
             'password'=> bcrypt($request->password),

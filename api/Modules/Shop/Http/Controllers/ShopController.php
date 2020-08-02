@@ -43,13 +43,23 @@ class ShopController extends Controller
     public function fetchShop()
     {
         try {
-            // $shop = Shop::leftJoin('ratings', 'ratings.shop_id', '=', 'shops.id')
-            // ->select('shops.id','shops.name', 'ratings.rating')->groupBy('rating')->get();
             $shop = Shop::with('ratings')->get();
             return response($shop);
             
         } catch (ExceptionMessage $e) {
             return response()->json(['msg' => $e, 'status' => 'Fetching failed'], 401);
+        }
+    }
+    public function fetchShopById($shop_id)
+    {
+        try {
+            
+            $myShop =Shop::with('ratings')->find($shop_id);
+            // ->with('ratings')->get();
+            return response()->json($myShop);
+        }
+        catch(Exception $e){
+            return response()->json(['msg' => $e, 'status' => 'Fetching failed'], 404);
         }
     }
     /**

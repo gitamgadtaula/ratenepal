@@ -24,3 +24,4 @@ Route::group(['prefix' => 'shop',  'middleware' => 'auth'], function()
     
 });
 Route::get('shop/getall','ShopController@fetchShop');
+Route::get('shop/{shop_id}','ShopController@fetchShopById');

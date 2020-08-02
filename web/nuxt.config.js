@@ -55,13 +55,31 @@ export default {
   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
-  axios: {},
+  axios: {
+    baseURL: process.env.BASE_URL
+  },
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'auth/login', method: 'post', propertyName: 'token' },
+          user: { url: 'auth/me', method: 'get', propertyName: 'user' },
+          logout: {url: 'auth/logout', method: 'post'}
+        },
+        tokenType:'Bearer'
+      }
+    }
+  },
+  router:{
+    middleware:['auth']
+  },
   /*
   ** Build configuration
   ** See https://nuxtjs.org/api/configuration-build/

@@ -1,7 +1,7 @@
 # Rate Nepal 
 
 ### Under construction 
-<p><img src="web/assets/ratenepal2.png" width="150"></p>
+<p><img src="web/assets/ratenepal4.png" width="150"></p>
 
 ### This is a project under construction. 
 
