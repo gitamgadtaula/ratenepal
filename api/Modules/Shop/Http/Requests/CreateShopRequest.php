@@ -16,9 +16,10 @@ class CreateShopRequest extends FormRequest
             'name' => 'required|max:50',
             'motto' => 'string',
             'website' => 'required',
-            'desc' => 'required',
+            'description' => 'required',
             'location' => 'required',
-            'contact' => 'required'
+            'email'=>'required',
+            'phone1' => 'required'
         ];
     }
 

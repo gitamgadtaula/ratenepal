@@ -7,7 +7,10 @@ use App\Http\Controllers\Auth;
 
 class Shop extends Model
 {
-  protected $fillable = ['name', 'motto', 'website', 'desc', 'location', 'contact', 'logo'];
+  protected $fillable = [
+    'name', 'motto',
+    'website', 'description', 'email', 'location', 'phone1', 'phone2', 'logo','user_id'
+  ];
 
   public function ratings()
   {
