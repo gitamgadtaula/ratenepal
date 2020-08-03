@@ -18,9 +18,12 @@ class CreateShopsTable extends Migration
             $table->string('name');
             $table->string('motto');
             $table->string('website');
-            $table->string('desc');
+            $table->string('description');
             $table->string('location');
-            $table->string('contact');
+            $table->bigInteger('phone1');
+            $table->bigInteger('phone2');
+            $table->integer('user_id');
+            $table->string('email');
             $table->string('logo')->nullable();
             $table->timestamps();
         });

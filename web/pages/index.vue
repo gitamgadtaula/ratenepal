@@ -1,10 +1,11 @@
 <template>
   <div>
-    
     <a-row type="flex" justify="end">
-      <a-button size="large" type="primary"
-        ><a-icon type="form" /> Create a shop
-      </a-button>
+      <nuxt-link to="/shop/create">
+        <a-button size="large" type="primary"
+          ><a-icon type="form" /> Create a shop
+        </a-button>
+      </nuxt-link>
     </a-row>
 
     <div class="shop-container" v-for="(item, index) in shopData" :key="index">
@@ -83,7 +84,7 @@ export default {
 .shop-container {
   margin-top: 5px;
   display: inline-block;
-  width:260px;
+  width: 260px;
 }
 .shop-card {
   background: whitesmoke;

@@ -1,11 +1,10 @@
 <template>
   <div>
-    {{ this.$auth.user.name }}
-    <hr />
     <div class="container" id="parent">
       <div class="login-container">
         <img src="~/assets/ratenepal4.png" alt="" />
         <div>
+          {{form.error}}
           <a-form>
             <a-form-item>
               <p class="input-text">Username</p>
@@ -40,7 +39,7 @@
                 Login
               </a-button>
               <div class="other-links">
-                <span><a href="#">Cancel</a></span>
+                <span><a href="#">Register</a></span>
                 <span>|</span>
                 <span><a href="/forgot-password">Forgot Password</a></span>
               </div>
@@ -66,7 +65,8 @@ export default {
       token: "",
       form: {
         email: "admin@gmail.com",
-        password: "admin123"
+        password: "admin123",
+        error:''
       }
     };
   },
@@ -81,23 +81,15 @@ export default {
         });
         this.$router.push("/");
       } catch (e) {
-        this.error = e.response.data.message;
+        console.log(`error: ${e}`);
+        this.form.error = e;
+          this.$notification.open({
+        message: this.form.error,
+        description:
+          '',
+        icon: <a-icon type="close" style="color: red;" />,
+      });
       }
-      // this.$axios
-      //   .post("/api/auth/login", this.form)
-      //   .then(response => {
-
-      //     this.$router.push("/");
-      //     this.$auth.loginWith('local', {
-      //     data: {
-      //       email: this.form.email,
-      //       password: this.form.password
-      //     },
-      //   })
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
     }
   }
 };

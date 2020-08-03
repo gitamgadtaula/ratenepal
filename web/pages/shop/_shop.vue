@@ -1,9 +1,11 @@
 <template>
   <div class="container">
+   
+    
     <a-row type="flex" justify="space-between">
       <a-col>
-        <h1 class="title" v-if="shopResponse">
-          {{ shop.name.toUpperCase() }}
+        <h1 class="title">
+          {{ shop.name }}
         </h1>
       </a-col>
       <a-col>
@@ -14,7 +16,7 @@
             two-tone-color="#f3b525"
             :style="{ fontSize: '28px' }"
           />
-          <span v-if="shopResponse"> {{ shop.ratings | getRating }} / 5 </span>
+          <span v-if="responseDidLoad"> {{ shop.ratings | getRating }} / 5 </span>
         </h1>
       </a-col>
     </a-row>
@@ -24,7 +26,6 @@
         <a-carousel autoplay>
           <div>
             <h3>Img 1</h3>
-    
           </div>
           <div>
             <h3>2 <br />dfgdf</h3>
@@ -34,25 +35,29 @@
         </a-carousel>
       </div>
     </a-row>
-    <span>
-      <a-rate v-model="rating.value" :tooltips="rating.desc" />
-      <span class="ant-rate-text">{{ rating.desc[rating.value - 1] }}</span>
+    <span v-if="isShopOwner">
+      <a-icon type="alert" /> Shop Owner !
     </span>
+    <span v-else>
+      <a-rate v-if="didRateAlready" v-model="userRatingOnShop.rating" disabled allow-half />
+      <a-rate v-else v-model="rating.value" :tooltips="rating.desc" />
+      <!-- <span class="ant-rate-text">{{ rating.desc[rating.value - 1] }}</span> -->
+    </span>
+
     <a-row type="flex" justify="space-between">
       <a-col :span="12">
-        <h2>{{ shop.desc }}</h2>
+        <div class="shop-desc">
+          <h3>{{ shop.description }}</h3>
+        </div>
       </a-col>
+
       <a-col :span="12" style="border-left:1px solid #dedede;padding: 4px;">
-        <p class="shop_info">
-          <a-icon type="environment" /> Location : {{ shop.location }}
-        </p>
-        <p class="shop_info">
-          <a-icon type="phone" /> Contact :{{ shop.contact }}
-        </p>
-        <p class="shop_info"><a-icon type="mail" /> Email :{{ shop.email }}</p>
-        <p class="shop_info">
-          <a-icon type="global" /> Website :{{ shop.website }}
-        </p>
+        <div class="shop-info">
+          <p><a-icon type="environment" /> Location: {{ shop.location }}</p>
+          <p><a-icon type="phone" /> Contact: {{ shop.phone1 }}</p>
+          <p><a-icon type="mail" /> Email: {{ shop.email }}</p>
+          <p><a-icon type="global" /> Website: {{ shop.website }}</p>
+        </div>
       </a-col>
     </a-row>
   </div>
@@ -68,18 +73,36 @@ export default {
         desc: ["terrible", "bad", "normal", "good", "wonderful"]
       },
       shop: "",
-      shopResponse: false
+      userRatingOnShop:'',
+      responseDidLoad: false,
+      didRateAlready:false
     };
   },
   methods: {
-    fetchShop(shop_id) {
+    fetchShop() {
       this.$axios.get(`/shop/${this.$route.params.shop}`).then(response => {
         this.shop = response.data;
-        this.shopResponse = true;
+        this.responseDidLoad = true;
       });
+    },
+    getUserRatingOnShop(){
+      this.$axios.get(`/rating/getuserrating/${this.$route.params.shop}`).then(
+        response=>{
+          this.userRatingOnShop=response.data
+          this.didRateAlready=true;
+        }
+      )
     }
   },
-
+  computed: {
+    isShopOwner() {
+      //to check if the logged in user is the owner of the shop
+      if (this.shop.user_id === this.$auth.user.id) {
+        return true;
+      }
+      return false;
+    }
+  },
   filters: {
     getRating(value) {
       console.log(value);
@@ -93,8 +116,8 @@ export default {
     }
   },
   created() {
-    // console.log(this.$route.params.shop);
     this.fetchShop();
+    this.getUserRatingOnShop();
   }
 };
 </script>
@@ -123,5 +146,16 @@ export default {
 
 .ant-carousel >>> .slick-slide h3 {
   color: #fff;
+}
+.shop-desc {
+  font-size: 16px;
+  text-align: left;
+  padding-left: 0px !important;
+  padding: 10px;
+}
+.shop-info {
+  padding: 10px;
+  font-size: 16px;
+  text-align: left;
 }
 </style>

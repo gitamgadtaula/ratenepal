@@ -33,14 +33,14 @@ class RatingController extends Controller
     public function getUserRatingOnShop($shop_id)
     {
         $user_id=auth()->user()->id;
-        $rating = Rating::select('shop_id', 'rating')->where([
+        $rating = Rating::select('rating')->where([
             ['user_id','=',$user_id],
             ['shop_id','=',$shop_id]
-        ])->get();
-        if (sizeOf($rating) == 0) {
+        ])->first();
+        if (!$rating) {
             return response()->json(['msg'=>'not rated yet']);
         }
-        return $rating;
+        return response()->json($rating);
     }
     public function getAllRatingOfShop($shop_id)
     {

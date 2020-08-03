@@ -25,7 +25,7 @@ class ShopController extends Controller
     public function createShop(CreateShopRequest $request)
     {
         try {
-            if (Shop::count() < 2) {
+            if (Shop::count() < 32) {
                 //A user can only post 2 shops
                 $input = $request->all();
                 if ($result = Shop::create($input)) {
