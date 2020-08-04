@@ -4,7 +4,7 @@
       <div class="login-container">
         <img src="~/assets/ratenepal4.png" alt="" />
         <div>
-          {{form.error}}
+          {{ form.error }}
           <a-form>
             <a-form-item>
               <p class="input-text">Username</p>
@@ -66,7 +66,7 @@ export default {
       form: {
         email: "admin@gmail.com",
         password: "admin123",
-        error:''
+        error: ""
       }
     };
   },
@@ -79,16 +79,13 @@ export default {
             password: this.form.password
           }
         });
+        this.$message.success('Logged in successfully',1);
         this.$router.push("/");
       } catch (e) {
         console.log(`error: ${e}`);
         this.form.error = e;
-          this.$notification.open({
-        message: this.form.error,
-        description:
-          '',
-        icon: <a-icon type="close" style="color: red;" />,
-      });
+
+        this.$message.error("Invalid credentials");
       }
     }
   }

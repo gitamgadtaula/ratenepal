@@ -23,8 +23,8 @@ class CreateShopsTable extends Migration
             $table->string('location');
             $table->bigInteger('phone1');
             $table->bigInteger('phone2')->nullable();
-            $table->integer('user_id');
-            // $table->foreign('user_id')->references('id')->on('users');
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('email');
             $table->string('logo')->nullable();
             $table->timestamps();

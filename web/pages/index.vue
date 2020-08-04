@@ -71,7 +71,7 @@ export default {
         return "not rated yet";
       }
       const sum = value.reduce((acc, item) => acc + item.rating, 0);
-      return (sum / length).toFixed(2); //round upto 2 decimal
+      return (sum / length).toFixed(1); //round upto 2 decimal
     }
   },
   created() {
@@ -89,7 +89,8 @@ export default {
 .shop-card {
   background: whitesmoke;
   padding: 10px;
-  border: 1px solid #491c9b;
+  border: 1px solid #21e62b;
+  box-shadow: 10px 22px 47px -12px rgba(0,0,0,0.75);
   /* max-width: 320px; */
   border-radius: 5px;
   margin: 12px 6px 6px 12px;
