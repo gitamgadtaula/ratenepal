@@ -74,6 +74,14 @@
         </div>
       </a-col>
     </a-row>
+    <hr />
+    <input type="text" v-model="comment" />
+    <button @click="postComment">Submit !</button>
+    <hr />
+    <div class="comment" v-for="(item, index) in shops" :key="index">
+      {{ item.comment }} | {{ item.user_id }}
+      <hr />
+    </div>
   </div>
 </template>
 
@@ -86,7 +94,9 @@ export default {
         value: 0,
         desc: ["terrible", "bad", "normal", "good", "wonderful"]
       },
+      comment: "",
       shop: "",
+      shops: "",
       userRatingOnShop: "",
       responseDidLoad: false,
       didRateAlready: false,
@@ -112,7 +122,7 @@ export default {
     },
     postRating() {
       this.$axios
-        .post(`rating/post/${this.$route.params.shop}`, {
+        .post(`/rating/post/${this.$route.params.shop}`, {
           rating: this.rating.value
         })
         .then(response => {
@@ -120,6 +130,25 @@ export default {
           this.$message.success("Your rating has been submitted");
           this.fetchShop();
           this.getUserRatingOnShop();
+        });
+    },
+    fetchComments() {
+      this.$axios
+        .get(`/comment/get/${this.$route.params.shop}`)
+        .then(response => {
+          console.log(response.data);
+          this.shops = response.data.comments;
+        });
+    },
+    postComment() {
+      this.$axios
+        .post(`/comment/post/${this.$route.params.shop}`, {
+          comment: this.comment
+        })
+        .then(response => {
+          console.log(response);
+          this.$message.success("Your comment has been submitted");
+          this.fetchComments();
         });
     },
     ratingWords(value) {
@@ -140,7 +169,6 @@ export default {
       console.log(value);
       const length = value.length;
       // this.ratingWords("brilliant");
-
       if (length === 0) {
         return "Not rated yet";
       }
@@ -150,6 +178,7 @@ export default {
     }
   },
   created() {
+    this.fetchComments();
     this.fetchShop();
     this.getUserRatingOnShop();
   }
