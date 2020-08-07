@@ -87,13 +87,14 @@ export default {
   width: 260px;
 }
 .shop-card {
-  background: whitesmoke;
   padding: 10px;
-  border: 1px solid #21e62b;
-  box-shadow: 10px 22px 47px -12px rgba(0,0,0,0.75);
-  /* max-width: 320px; */
-  border-radius: 5px;
   margin: 12px 6px 6px 12px;
   color: #000000;
+  /* background: #f4fbff; */
+  background: #FFFFFF;
+  border: 1px solid #add9f8;
+  box-sizing: border-box;
+  box-shadow: 3px 4px 4px rgba(213, 211, 211, 0.25);
+  border-radius: 6px;
 }
 </style>

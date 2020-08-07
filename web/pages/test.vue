@@ -1,30 +1,57 @@
 <template>
-  <div>
-    <Child @my-vehicle="myVehicle" />
-    <!--optionally we can listen to custom events by using v-on directive
-          <Child v-on:my-vehicle="myVehicle" />
-    -->
-    <hr />
-    The value emitted from child is: {{ vehicleFromChild }}
+  <div class="user-container">
+    {{userId}}
+    <a-row type="flex" :gutter="12">
+      <a-col>
+        <img src="@/assets/user.jpg" class="user-dp" />
+      </a-col>
+      <a-col>
+        <p>@{{ user.username }}</p>
+        <p style="text-transform:capitalize;">{{ user.full_name }}</p>
+      </a-col>
+    </a-row>
+    <p><a-icon type="environment" /> {{ user.location }}</p>
+    <p><a-icon type="mail" /> {{ user.email }}</p>
+    <p><a-icon type="environment" /> {{ user.gender }}</p>
+    <p><a-icon type="crown" /> {{ user.occupation }}</p>
   </div>
 </template>
-
+<style scoped>
+.user-container {
+  background: #ffffff;
+  border: 1px solid #add9f8;
+  box-sizing: border-box;
+  box-shadow: 3px 4px 4px rgba(213, 211, 211, 0.25);
+  border-radius: 6px;
+  padding: 5px 10px;
+}
+.user-dp {
+  height: 50px;
+  border-radius: 50%;
+}
+p {
+  margin: 1px;
+}
+</style>
 <script>
-import Child from "./Child";
 export default {
-  components: {
-    Child
-  },
+  components: {},
+    props: ['userId'],
   data() {
     return {
-      vehicleFromChild
+      user: ""
     };
   },
   methods: {
-    myVehicle(value) {
-      this.vehicleFromChild = value;
-      //the emitted value from child is passed to this function as a parameter
+    getUser() {
+      this.$axios.get(`/auth/user/2`).then(response => {
+        console.log(response.data);
+        this.user = response.data.user;
+      });
     }
+  },
+  created() {
+    this.getUser();
   }
 };
 </script>

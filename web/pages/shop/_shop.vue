@@ -2,23 +2,28 @@
   <div class="container">
     <a-row type="flex" justify="space-between">
       <a-col>
-        <img src="@/assets/shops/shop-icon.png" style="width:40px;" />
-        <h1 class="title">
-          {{ shop.name }}
-        </h1>
+        <div class="title-container">
+          <!-- <img src="@/assets/shops/shop-icon.png" style="width:40px;" /> -->
+          <h1 class="title">
+            {{ shop.name }}
+          </h1>
+        </div>
       </a-col>
       <a-col>
-        <h1>
-          <a-icon
-            type="star"
-            theme="twoTone"
-            two-tone-color="#f3b525"
-            :style="{ fontSize: '28px' }"
-          />
-          <span v-if="responseDidLoad">
-            {{ shop.ratings | getRating }} / 5
-          </span>
-        </h1>
+        <div class="title-container">
+          <h1>
+            <a-icon
+              type="star"
+              theme="twoTone"
+              two-tone-color="#f3b525"
+              :style="{ fontSize: '28px' }"
+            />
+            <span v-if="responseDidLoad">
+              {{ shop.ratings | getRating }} / 5
+            </span>
+            <!-- <span> {{ shop.ratings}} </span> -->
+          </h1>
+        </div>
       </a-col>
     </a-row>
 
@@ -36,7 +41,7 @@
         </a-carousel>
       </div>
     </a-row>
-    <span v-if="isShopOwner"> <a-icon type="alert" /> Shop Owner ! </span>
+    <span v-if="isShopOwner"> <a-icon type="crown" /> Shop Owner ! </span>
     <span v-else>
       <div v-if="didRateAlready">
         <p>Your Rating : {{ userRatingOnShop.rating }}/5</p>
@@ -50,7 +55,7 @@
           cancel-text="No"
           @confirm="postRating"
         >
-          <a-icon slot="icon" type="star" style="color: #f3b525" />
+          <a-icon slot="icon" type="star" theme="filled" style="color: #f3b525" />
 
           <a-rate v-model="rating.value" :tooltips="rating.desc" />
         </a-popconfirm>
@@ -74,22 +79,33 @@
         </div>
       </a-col>
     </a-row>
+
     <hr />
-    <input type="text" v-model="comment" />
-    <button @click="postComment">Submit !</button>
-    <hr />
-    <div class="comment" v-for="(item, index) in shops" :key="index">
-      {{ item.comment }} | {{ item.user_id }}
-      <hr />
-    </div>
+    <section class="comment-container" style="width:50%;">
+      <a-textarea v-model="comment" />
+      <a-row type="flex" justify="end"
+        ><a-button @click="postComment">Submit !</a-button></a-row
+      >
+      <div class="title-container" v-if="shops.length>=1">
+        <div class="comment" v-for="(item, index) in shops" :key="index">
+          <user-pop-info :userId="item.user_id" style="width:30%;" />
+          <b
+            ><i>{{ item.comment }}</i>
+          </b>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
+import UserPopInfo from "@/components/UserPopInfo";
+// import UserInfo from "@/components/UserInfo";
 export default {
   auth: true,
   data() {
     return {
+      username: "",
       rating: {
         value: 0,
         desc: ["terrible", "bad", "normal", "good", "wonderful"]
@@ -100,6 +116,7 @@ export default {
       userRatingOnShop: "",
       responseDidLoad: false,
       didRateAlready: false,
+      commentDidLoad: false,
       ratingInWords: ""
     };
   },
@@ -138,6 +155,7 @@ export default {
         .then(response => {
           console.log(response.data);
           this.shops = response.data.comments;
+          this.commentDidLoad = true;
         });
     },
     postComment() {
@@ -151,8 +169,20 @@ export default {
           this.fetchComments();
         });
     },
-    ratingWords(value) {
-      this.ratingInWords = value;
+
+    isShopOwnerComment(value) {
+      if (this.shop.user_id === value) {
+        return true;
+      }
+      return false;
+    },
+    getUsername(value) {
+      this.$axios.get(`/auth/user/${value}`).then(response => {
+        // this.username = response.data.user.username;
+        // console.log(this.username);
+        console.log(response.data.user.username);
+        return response.data.user.username;
+      });
     }
   },
   computed: {
@@ -192,6 +222,15 @@ export default {
   min-height: 100vh;
   padding: 10px;
 }
+.title-container {
+  margin-top: 5px;
+  background: #ffffff;
+  border: 1px solid #add9f8;
+  box-sizing: border-box;
+  box-shadow: 3px 4px 4px rgba(213, 211, 211, 0.25);
+  border-radius: 6px;
+  padding: 5px 10px;
+}
 .title {
   text-transform: capitalize;
 }
@@ -220,5 +259,14 @@ export default {
   padding: 10px;
   font-size: 16px;
   text-align: left;
+}
+.comment {
+  border-bottom: 1px solid #eeeeee;
+  margin-top: 4px;
+  box-shadow: 3px 4px 4px rgba(213, 211, 211, 0.25);
+}
+.user-dp {
+  height: 25px;
+  border-radius: 50%;
 }
 </style>
