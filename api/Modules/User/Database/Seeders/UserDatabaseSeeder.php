@@ -1,5 +1,7 @@
 <?php
+
 namespace Modules\User\Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Modules\User\Entities\User;
@@ -16,14 +18,23 @@ class UserDatabaseSeeder extends Seeder
     {
         Model::unguard();
         User::create([
-            'name' => 'Admin',
+            'username' => 'Admin',
+            'full_name' => 'Rate Nepal Admin',
+            'location' => 'Worldwide',
+            'gender' => 'neutral',
+            'occupation' => 'Software Engineer',
+
             'email' => 'admin@gmail.com',
             'password' => bcrypt('admin123')
         ]);
         User::create([
-            'name' => 'User1',
-            'email' => 'user1@gmail.com',
-            'password' => bcrypt('user123')
+            'username' => 'saroj',
+            'full_name' => 'saroj poudel',
+            'email' => 'saroj@gmail.com',
+            'location' => 'BhaisePati',
+            'gender' => 'male',
+            'occupation' => 'Qualitiy Analyst',
+            'password' => bcrypt('saroj123')
         ]);
     }
 }
