@@ -44,8 +44,8 @@
     <span v-if="isShopOwner"> <a-icon type="crown" /> Shop Owner ! </span>
     <span v-else>
       <div v-if="didRateAlready">
-        <p>Your Rating : {{ userRatingOnShop.rating }}/5</p>
-        <a-rate v-model="userRatingOnShop.rating" disabled allow-half />
+        <p>Your Rating : {{ userRatingOnShop.rating.rating }}/5</p>
+        <a-rate v-model="userRatingOnShop.rating.rating" disabled allow-half />
       </div>
       <div v-else>
         <p>Please Rate !</p>
@@ -55,7 +55,12 @@
           cancel-text="No"
           @confirm="postRating"
         >
-          <a-icon slot="icon" type="star" theme="filled" style="color: #f3b525" />
+          <a-icon
+            slot="icon"
+            type="star"
+            theme="filled"
+            style="color: #f3b525"
+          />
 
           <a-rate v-model="rating.value" :tooltips="rating.desc" />
         </a-popconfirm>
@@ -86,12 +91,16 @@
       <a-row type="flex" justify="end"
         ><a-button @click="postComment">Submit !</a-button></a-row
       >
-      <div class="title-container" v-if="shops.length>=1">
+      <div class="title-container" v-if="shops.length >= 1">
         <div class="comment" v-for="(item, index) in shops" :key="index">
+          
           <user-pop-info :userId="item.user_id" style="width:30%;" />
+          <user-rating :shopId="shopId" :userId="item.user_id" />
           <b
-            ><i>{{ item.comment }}</i>
+            ><i>" {{ item.comment }} "</i>
           </b>
+          
+          <p class="date">{{ item.created_at | moment("from", "now") }}</p>
         </div>
       </div>
     </section>
@@ -100,7 +109,7 @@
 
 <script>
 import UserPopInfo from "@/components/UserPopInfo";
-// import UserInfo from "@/components/UserInfo";
+import UserRating from "@/components/UserRating";
 export default {
   auth: true,
   data() {
@@ -117,7 +126,8 @@ export default {
       responseDidLoad: false,
       didRateAlready: false,
       commentDidLoad: false,
-      ratingInWords: ""
+      ratingInWords: "",
+      shopId:''
     };
   },
   methods: {
@@ -169,20 +179,11 @@ export default {
           this.fetchComments();
         });
     },
-
     isShopOwnerComment(value) {
       if (this.shop.user_id === value) {
         return true;
       }
       return false;
-    },
-    getUsername(value) {
-      this.$axios.get(`/auth/user/${value}`).then(response => {
-        // this.username = response.data.user.username;
-        // console.log(this.username);
-        console.log(response.data.user.username);
-        return response.data.user.username;
-      });
     }
   },
   computed: {
@@ -208,6 +209,7 @@ export default {
     }
   },
   created() {
+    this.shopId = this.$route.params.shop;
     this.fetchComments();
     this.fetchShop();
     this.getUserRatingOnShop();
@@ -265,8 +267,10 @@ export default {
   margin-top: 4px;
   box-shadow: 3px 4px 4px rgba(213, 211, 211, 0.25);
 }
-.user-dp {
-  height: 25px;
-  border-radius: 50%;
+.date {
+  font-size: 9px;
+  font-weight: 100;
+  color: #c3073f;
+  font-style: italic;
 }
 </style>

@@ -10,19 +10,21 @@ use Modules\Shop\Entities\Shop;
 
 class RatingController extends Controller
 {
+
+
     public function postRating(Request $request, $shop_id)
     {
         $rating = $request->rating;
         $user_id = auth()->user()->id;
 
-        $shop =Shop::select('user_id')->where('id',$shop_id)->first();
-        if($shop->user_id===$user_id){
+        $shop = Shop::select('user_id')->where('id', $shop_id)->first();
+        if ($shop->user_id === $user_id) {
             //check if the authenticated user is the shop owner 
-            return response()->json(['msg'=>'cant rate your own shop'],403);
+            return response()->json(['msg' => 'cant rate your own shop'], 403);
         }
         //checking if the authenticated user has already rated the specific shop
         $getRating = Rating::select('shop_id', 'rating')->where([
-            ['user_id', '=', $user_id], 
+            ['user_id', '=', $user_id],
             ['shop_id', '=', $shop_id]
         ])->get();
         if (sizeOf($getRating) === 0) {
@@ -33,21 +35,35 @@ class RatingController extends Controller
             ]);
             return response()->json(['msg' => 'Rated', $data]);
         }
-        return response()->json(['msg'=>'sorry you have rated this shop already'],403);
+        return response()->json(['msg' => 'sorry you have rated this shop already'], 403);
     }
 
     public function getUserRatingOnShop($shop_id)
     {
-        $user_id=auth()->user()->id;
-       
+        //get authenticated user rating on shop
+        $user_id = auth()->user()->id;
         $rating = Rating::select('rating')->where([
-            ['user_id','=',$user_id],
-            ['shop_id','=',$shop_id]
+            ['user_id', '=', $user_id],
+            ['shop_id', '=', $shop_id]
         ])->first();
         if (!$rating) {
-            return response()->json(['msg'=>'not rated yet','status'=>false]);
+            return response()->json(['msg' => 'not rated yet', 'status' => false]);
         }
-        return response()->json($rating);
+        return response()->json(['rating'=>$rating,'status'=>true]);
+    }
+    public function getRatingByUserId($shop_id, $user_id)
+    {
+        //get any specific user rating on any specific shop
+        //used mostly for comments and replies
+
+        $rating = Rating::select('rating')->where([
+            ['user_id', '=', $user_id],
+            ['shop_id', '=', $shop_id]
+        ])->first();
+        if (!$rating) {
+            return response()->json(['msg' => 'not rated yet', 'status' => false]);
+        }
+        return response()->json(['rating'=>$rating,'status'=>true]);
     }
     public function getAllRatingOfShop($shop_id)
     {

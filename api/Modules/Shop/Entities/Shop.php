@@ -9,7 +9,7 @@ class Shop extends Model
 {
   protected $fillable = [
     'name', 'motto',
-    'website', 'description', 'email', 'location', 'phone1', 'phone2', 'logo','user_id'
+    'website', 'description', 'email', 'location', 'phone1', 'phone2', 'logo', 'user_id'
   ];
 
   public function ratings()
@@ -17,8 +17,13 @@ class Shop extends Model
     return $this->hasMany(\Modules\Feedback\Entities\Rating::class);
   }
 
-  public function user()
+  public function users()
   {
     return $this->belongsTo(\Modules\User\Entities\User::class);
+  }
+
+  public function comments()
+  {
+    return $this->hasMany(\Modules\Feedback\Entities\Comment::class);
   }
 }

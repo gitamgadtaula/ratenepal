@@ -27,7 +27,7 @@
         <a-col v-if="$auth.loggedIn">
           <a-dropdown :trigger="['click']">
             <a class="ant-dropdown-link" style="color:white;">
-              <a-icon type="user" /> {{ this.$auth.user.name }}
+              <a-icon type="user" /> {{ this.$auth.user.username }}
             </a>
             <a-menu slot="overlay">
               <a-menu-item key="0">

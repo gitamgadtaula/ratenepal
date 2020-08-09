@@ -1,9 +1,12 @@
 <template>
   <div>
-    {{userId}} | {{shopId}}
-     {{rating.status}}
- <a-rate v-if="rating.status" v-model="rating.rating.rating" disabled allow-half />
- <span v-else> Not rated yet </span>
+    <a-rate
+      v-if="rating.status"
+      v-model="rating.rating.rating"
+      disabled
+      allow-half
+    />
+    <span v-else> Not rated yet </span>
   </div>
 </template>
 <style scoped>
@@ -26,7 +29,7 @@ p {
 <script>
 export default {
   components: {},
-    // props: ['userId','shopId'],
+  props: ["userId", "shopId"],
   data() {
     return {
       rating: ""
@@ -34,10 +37,13 @@ export default {
   },
   methods: {
     getUser() {
-      this.$axios.get(`/rating/getuserrating/4/1`).then(response => {
-        console.log(response.data);
-        this.rating = response.data;
-      });
+      this.$axios
+        // .get(`/rating/getuserrating/4/1`)
+        .get(`/rating/getuserrating/${this.shopId}/${this.userId}`)
+        .then(response => {
+          console.log(response.data);
+          this.rating = response.data;
+        });
     }
   },
   created() {

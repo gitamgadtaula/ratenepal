@@ -22,3 +22,4 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('rating/get/{shop_id}', 'RatingController@getAllRatingOfShop');
 Route::get('rating/getuserrating/{shop_id}', 'RatingController@getUserRatingOnShop');
 Route::get('comment/get/{shop_id}', 'CommentController@getAllCommentsOnShop');
+Route::get('rating/getuserrating/{shop_id}/{user_id}', 'RatingController@getRatingByUserId');

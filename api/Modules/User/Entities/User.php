@@ -1,8 +1,9 @@
 <?php
 
 namespace Modules\User\Entities;
+
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-// use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -37,7 +38,7 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
     public function getJWTIdentifier()
     {
         return $this->getKey();
@@ -55,9 +56,16 @@ class User extends Authenticatable implements JWTSubject
 
     //relation with other modules
 
-    public function ratings(){
+    public function ratings()
+    {
         return $this->hasMany(\Modules\Feedback\Entities\Rating::class);
     }
-
+    public function shops()
+    {
+        return $this->hasMany(\Modules\Shop\Entities\Shop::class);
+    }
+    public function comments()
+    {
+        return $this->hasMany(\Modules\Feedback\Entities\Comment::class);
+    }
 }
-

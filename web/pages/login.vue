@@ -84,7 +84,6 @@ export default {
       } catch (e) {
         console.log(`error: ${e}`);
         this.form.error = e;
-
         this.$message.error("Invalid credentials");
       }
     }
