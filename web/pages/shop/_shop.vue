@@ -21,7 +21,7 @@
             <span v-if="responseDidLoad">
               {{ shop.ratings | getRating }} / 5
             </span>
-            <!-- <span> {{ shop.ratings}} </span> -->
+       
           </h1>
         </div>
       </a-col>
@@ -109,7 +109,7 @@
 
 <script>
 import UserPopInfo from "@/components/UserPopInfo";
-import UserRating from "@/components/UserRating";
+import UserRating from "@/components/Rating/UserRatingInComment";
 export default {
   auth: true,
   data() {

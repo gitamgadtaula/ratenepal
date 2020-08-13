@@ -1,47 +1,87 @@
 <template>
-  <div>
-    {{userId}} | {{shopId}}
-     {{rating.status}}
- <a-rate v-if="rating.status" v-model="rating.rating.rating" disabled allow-half />
- <span v-else> Not rated yet </span>
+  <div class="container">
+    <a-row type="flex" justify="start" :gutter="12">
+      <a-col :span="10">
+        <div class="carousel">
+          <Carousel />
+        </div>
+      </a-col>
+
+      <a-col :span="8">
+        <h1>{{shop.name}}</h1>
+        <p class="motto">{{shop.motto}}</p>
+        <div class="show-rating">
+          <show-shop-rating :data="shop.ratings" v-if="responseDidLoad" />
+           <SubmitRating :shopId="shopId" :shopOwner="shop.user_id"/>
+        </div>
+        <div class="shop-info">
+          <a-row type="flex" justify="space-between" :gutter="12"> 
+            <a-col>
+          <p>
+            <a-icon type="global" /> Website:
+            <a :href="shop.website">{{ shop.website }}</a>
+          </p>
+            </a-col>
+            <a-col>
+
+          <p>
+            <a-icon type="phone" />
+            Contact: {{ shop.phone1 }}
+          </p>
+            </a-col>
+          </a-row>
+          <a-row type="flex" justify="space-between" :gutter="12"> 
+            <a-col>
+          <p>
+            <a-icon type="mail" />
+            Email: {{ shop.email }}
+          </p>
+            </a-col>
+            <a-col>
+          <p>
+            <a-icon type="environment" />
+            Location: {{ shop.location }}
+          </p>
+            </a-col>
+          </a-row>
+        </div>
+      </a-col>
+    </a-row>
+   
+    <a-row style="margin-top:50px;">
+      <div class="shop-desc">
+        <h3>{{ shop.description }}</h3>
+      </div>
+    </a-row>
   </div>
 </template>
-<style scoped>
-.user-container {
-  background: #ffffff;
-  border: 1px solid #add9f8;
-  box-sizing: border-box;
-  box-shadow: 3px 4px 4px rgba(213, 211, 211, 0.25);
-  border-radius: 6px;
-  padding: 5px 10px;
-}
-.user-dp {
-  height: 50px;
-  border-radius: 50%;
-}
-p {
-  margin: 1px;
-}
-</style>
+
 <script>
+import Carousel from "@/components/Carousel.vue";
+import ShowShopRating from "@/components/Rating/ShowShopRating.vue";
+import SubmitRating from "@/components/Rating/SubmitRating.vue";
+
 export default {
-  components: {},
-    // props: ['userId','shopId'],
+  components: { Carousel, ShowShopRating },
   data() {
     return {
-      rating: ""
+      shopId: 1,
+      shop: "",
+      responseDidLoad: false,
     };
   },
   methods: {
-    getUser() {
-      this.$axios.get(`/rating/getuserrating/4/1`).then(response => {
-        console.log(response.data);
-        this.rating = response.data;
+    getshop() {
+      this.$axios.get(`/shop/${this.shopId}`).then((response) => {
+        this.shop = response.data;
+        this.responseDidLoad = true;
       });
-    }
+    },
   },
   created() {
-    this.getUser();
-  }
+    this.getshop();
+  },
 };
 </script>
+<style scoped>
+</style>
