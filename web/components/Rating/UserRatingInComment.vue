@@ -1,6 +1,7 @@
 <template>
   <div>
-    <a-rate
+    
+    <a-rate character="*"
       v-if="rating.status"
       v-model="rating.rating.rating"
       disabled

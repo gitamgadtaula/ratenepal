@@ -5,7 +5,10 @@
     </span>
     <span v-else>
       <div v-if="didRateAlready">
-        <p>Your Rating : {{ userRatingOnShop.rating.rating }} <a-icon type="star" /> </p>
+        
+          <!-- <p>Your Rating :</p>  -->
+          <a-rate style="font-size:32px;margin:0px;" character="*" v-model="userRatingOnShop.rating.rating" disabled />
+        
         <!-- <a-rate v-model="userRatingOnShop.rating.rating" disabled allow-half /> -->
       </div>
       <div v-else>
@@ -28,7 +31,7 @@
 
 <script>
 export default {
-  props: ["shopId","shopOwner"],
+  props: ["shopId", "shopOwner"],
   data() {
     return {
       rating: {
@@ -71,12 +74,12 @@ export default {
         return true;
       }
       return false;
-    }
+    },
   },
-  created(){
-      this.getUserRatingOnShop();
-  }
-}
+  created() {
+    this.getUserRatingOnShop();
+  },
+};
 </script>
 
 <style>

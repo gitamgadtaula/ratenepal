@@ -4,9 +4,7 @@
       <a-col>
         <div class="title-container">
           <!-- <img src="@/assets/shops/shop-icon.png" style="width:40px;" /> -->
-          <h1 class="title">
-            {{ shop.name }}
-          </h1>
+          <h1 class="title">{{ shop.name }}</h1>
         </div>
       </a-col>
       <a-col>
@@ -18,10 +16,7 @@
               two-tone-color="#f3b525"
               :style="{ fontSize: '28px' }"
             />
-            <span v-if="responseDidLoad">
-              {{ shop.ratings | getRating }} / 5
-            </span>
-       
+            <span v-if="responseDidLoad">{{ shop.ratings | getRating }} / 5</span>
           </h1>
         </div>
       </a-col>
@@ -34,14 +29,23 @@
             <h3>Img 1</h3>
           </div>
           <div>
-            <h3>2 <br />dfgdf</h3>
+            <h3>
+              2
+              <br />dfgdf
+            </h3>
           </div>
-          <div><h3>3</h3></div>
-          <div><h3>4</h3></div>
+          <div>
+            <h3>3</h3>
+          </div>
+          <div>
+            <h3>4</h3>
+          </div>
         </a-carousel>
       </div>
     </a-row>
-    <span v-if="isShopOwner"> <a-icon type="crown" /> Shop Owner ! </span>
+    <span v-if="isShopOwner">
+      <a-icon type="crown" />Shop Owner !
+    </span>
     <span v-else>
       <div v-if="didRateAlready">
         <p>Your Rating : {{ userRatingOnShop.rating.rating }}/5</p>
@@ -55,12 +59,7 @@
           cancel-text="No"
           @confirm="postRating"
         >
-          <a-icon
-            slot="icon"
-            type="star"
-            theme="filled"
-            style="color: #f3b525"
-          />
+          <a-icon slot="icon" type="star" theme="filled" style="color: #f3b525" />
 
           <a-rate v-model="rating.value" :tooltips="rating.desc" />
         </a-popconfirm>
@@ -77,10 +76,22 @@
 
       <a-col :span="12" style="border-left:1px solid #dedede;padding: 4px;">
         <div class="shop-info">
-          <p><a-icon type="environment" /> Location: {{ shop.location }}</p>
-          <p><a-icon type="phone" /> Contact: {{ shop.phone1 }}</p>
-          <p><a-icon type="mail" /> Email: {{ shop.email }}</p>
-          <p><a-icon type="global" /> Website: {{ shop.website }}</p>
+          <p>
+            <a-icon type="environment" />
+            Location: {{ shop.location }}
+          </p>
+          <p>
+            <a-icon type="phone" />
+            Contact: {{ shop.phone1 }}
+          </p>
+          <p>
+            <a-icon type="mail" />
+            Email: {{ shop.email }}
+          </p>
+          <p>
+            <a-icon type="global" />
+            Website: {{ shop.website }}
+          </p>
         </div>
       </a-col>
     </a-row>
@@ -88,18 +99,17 @@
     <hr />
     <section class="comment-container" style="width:50%;">
       <a-textarea v-model="comment" />
-      <a-row type="flex" justify="end"
-        ><a-button @click="postComment">Submit !</a-button></a-row
-      >
+      <a-row type="flex" justify="end">
+        <a-button @click="postComment">Submit !</a-button>
+      </a-row>
       <div class="title-container" v-if="shops.length >= 1">
         <div class="comment" v-for="(item, index) in shops" :key="index">
-          
           <user-pop-info :userId="item.user_id" style="width:30%;" />
-          <user-rating :shopId="shopId" :userId="item.user_id" />
-          <b
-            ><i>" {{ item.comment }} "</i>
+          <user-rating-in-comment :shopId="shopId" :userId="item.user_id" />
+          <b>
+            <i>" {{ item.comment }} "</i>
           </b>
-          
+
           <p class="date">{{ item.created_at | moment("from", "now") }}</p>
         </div>
       </div>
@@ -109,15 +119,16 @@
 
 <script>
 import UserPopInfo from "@/components/UserPopInfo";
-import UserRating from "@/components/Rating/UserRatingInComment";
+import UserRatingInComment from "@/components/Rating/UserRatingInComment";
 export default {
+  components: { UserRatingInComment },
   auth: true,
   data() {
     return {
       username: "",
       rating: {
         value: 0,
-        desc: ["terrible", "bad", "normal", "good", "wonderful"]
+        desc: ["terrible", "bad", "normal", "good", "wonderful"],
       },
       comment: "",
       shop: "",
@@ -127,12 +138,12 @@ export default {
       didRateAlready: false,
       commentDidLoad: false,
       ratingInWords: "",
-      shopId:''
+      shopId: "",
     };
   },
   methods: {
     fetchShop() {
-      this.$axios.get(`/shop/${this.$route.params.shop}`).then(response => {
+      this.$axios.get(`/shop/${this.$route.params.shop}`).then((response) => {
         this.shop = response.data;
         this.responseDidLoad = true;
       });
@@ -140,7 +151,7 @@ export default {
     getUserRatingOnShop() {
       this.$axios
         .get(`/rating/getuserrating/${this.$route.params.shop}`)
-        .then(response => {
+        .then((response) => {
           this.userRatingOnShop = response.data;
           if (response.data.status != false) {
             this.didRateAlready = true;
@@ -150,9 +161,9 @@ export default {
     postRating() {
       this.$axios
         .post(`/rating/post/${this.$route.params.shop}`, {
-          rating: this.rating.value
+          rating: this.rating.value,
         })
-        .then(response => {
+        .then((response) => {
           console.log(response);
           this.$message.success("Your rating has been submitted");
           this.fetchShop();
@@ -162,7 +173,7 @@ export default {
     fetchComments() {
       this.$axios
         .get(`/comment/get/${this.$route.params.shop}`)
-        .then(response => {
+        .then((response) => {
           console.log(response.data);
           this.shops = response.data.comments;
           this.commentDidLoad = true;
@@ -171,9 +182,9 @@ export default {
     postComment() {
       this.$axios
         .post(`/comment/post/${this.$route.params.shop}`, {
-          comment: this.comment
+          comment: this.comment,
         })
-        .then(response => {
+        .then((response) => {
           console.log(response);
           this.$message.success("Your comment has been submitted");
           this.fetchComments();
@@ -184,7 +195,7 @@ export default {
         return true;
       }
       return false;
-    }
+    },
   },
   computed: {
     isShopOwner() {
@@ -193,7 +204,7 @@ export default {
         return true;
       }
       return false;
-    }
+    },
   },
   filters: {
     getRating(value) {
@@ -206,14 +217,14 @@ export default {
       const sum = value.reduce((acc, item) => acc + item.rating, 0);
       //  this.ratingInWords="excellent"
       return (sum / length).toFixed(1); //round upto 2 decimal
-    }
+    },
   },
   created() {
     this.shopId = this.$route.params.shop;
     this.fetchComments();
     this.fetchShop();
     this.getUserRatingOnShop();
-  }
+  },
 };
 </script>
 

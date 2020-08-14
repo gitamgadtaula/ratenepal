@@ -16,7 +16,7 @@
           About
         </a-col>
         <a-col>
-          Shops
+           <nuxt-link to="/home" style="color:white;">  Shops </nuxt-link>
         </a-col>
 
         <a-col>
