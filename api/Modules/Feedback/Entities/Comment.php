@@ -10,10 +10,14 @@ class Comment extends Model
 
     public function users()
     {
-        return $this->belongsTo(\Modules\User\Entities\User::class);
+        return $this->belongsTo(\app\User::class);
     }
     public function shops()
     {
         return $this->belongsTo(\Modules\Shop\Entities\Shop::class);
+    }
+    public function replies()
+    {
+        return $this->hasMany(\Modules\Feedback\Entities\Reply::class);
     }
 }

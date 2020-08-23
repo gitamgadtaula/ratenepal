@@ -28,14 +28,24 @@ class CommentController extends Controller
     }
     public function getAllCommentsOnShop($shop_id)
     {
-        $result = Comment::select('comment', 'created_at', 'user_id')->with('users')->where([
+        $result = Comment::select('comment', 'id', 'created_at', 'user_id')->where([
             ['shop_id', '=', $shop_id]
-        ])->get();
+        ])->with('replies')->get();
         // $result = Comment::where('id',1)->users->get();
 
         //     if (sizeOf($result) === 0) {
         //         return response()->json('No comments yet');
         // }
         return response()->json(['comments' => $result]);
+    }
+    public function deleteComment($comment_id)
+    {
+        $user_id = auth()->user()->id;
+        if (Comment::find($comment_id)->user_id != $user_id) {
+            return response()->json(['msg' => 'Unauthorized']);
+        } else if (Comment::destroy($comment_id)) {
+            return response()->json(['msg' => 'deleted successfully']);
+        }
+        return response()->json(['msg' => 'delete failed']);
     }
 }

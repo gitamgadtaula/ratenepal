@@ -1,6 +1,16 @@
 <template>
   <div>
-    <a-popover>
+    <a-row type="flex" :gutter="12">
+          <a-col>
+            <img src="@/assets/user.jpg" class="user-dp" />
+          </a-col>
+          <a-col>
+            <p>@{{ user.username }}</p>
+            <p style="text-transform:capitalize;">{{ user.full_name }}</p>
+          </a-col>
+        </a-row>
+        
+    <!-- <a-popover>
       <template slot="content">
         <div class="user-container">
         <a-row type="flex" :gutter="12">
@@ -18,7 +28,7 @@
         <p><a-icon type="crown" /> {{ user.occupation }}</p>
         </div>
       </template>
-      <!-- <a-icon type="crown" v-if="isShopOwnerComment(item.user_id)" /> -->
+      <a-icon type="crown" v-if="isShopOwnerComment(item.user_id)" />
       <a-row type="flex" :gutter="12">
         <a-col>
           <img src="@/assets/user.jpg" class="user-dp" />
@@ -28,7 +38,7 @@
           <p style="text-transform:capitalize;">{{ user.full_name }}</p>
         </a-col>
       </a-row>
-    </a-popover>
+    </a-popover> -->
   </div>
 </template>
 <style scoped>

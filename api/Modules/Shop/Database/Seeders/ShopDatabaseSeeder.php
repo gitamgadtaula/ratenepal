@@ -16,9 +16,12 @@ class ShopDatabaseSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-        $shops = ['Manjil', 'Evo Store', 'Bajeko Sekuwa', 'Thuldai ko dokan', 'Big Mart', 'KK Mart'];
+        $shops = ['Manjil Tea and Coffee', 'Evo Store', 'Bajeko Sekuwa', 'Thuldai ko dokan', 'Big Mart', 'KK Mart'];
         $motto = [
-            'We offer tea', 'We fix your apple', 'we serve sekuwa', 'Evreything kirana',
+            'We offer best tea filled with emotions and love. 
+            We are more than just a tea shop. 
+            You can come in here high and crave the fuck out of your hunger',
+            'We fix your apple', 'we serve sekuwa', 'Evreything kirana',
             'big just like the name', 'your night time mart'
         ];
         $location = ['Ku gate', 'Durabar Marg', 'Baneshowr', 'Sombare', 'Bhaktapur', 'Satdobato'];
@@ -38,7 +41,7 @@ class ShopDatabaseSeeder extends Seeder
                 'description' => $desc,
                 'location' => $location[$index],
                 'phone1' => 021540632,
-                'phone2'=> 9832675488,
+                'phone2' => 9832675488,
                 'website' => 'mywebsite.com',
                 'email' => 'contact@example.com',
                 'user_id' => $user_id
