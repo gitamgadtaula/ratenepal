@@ -27,7 +27,7 @@
         </a-col>
       </a-row>
       <span v-if="isShopOwnerComment(item.user_id)">
-        <a-icon type="crown" />Owner
+        <a-icon type="crown" />&nbsp;Owner
       </span>
       <user-rating-in-comment v-else :shopId="shopId" :userId="item.user_id" />
       <a-row type="flex" justify="space-between">

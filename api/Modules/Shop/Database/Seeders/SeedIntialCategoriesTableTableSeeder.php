@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Shop\Entities\Category;
 
-class SeedCategoriesTableTableSeeder extends Seeder
+class SeedIntialCategoriesTableTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,7 +16,6 @@ class SeedCategoriesTableTableSeeder extends Seeder
     public function run()
     {
         Model::unguard();
-
         $categories = [
             'Clothing', 'Food', 'Shopping', 'Electronics', 'Sports', 'Literature',
             'AutoMobile', 'Cosmetics', 'Fashion'
@@ -26,8 +25,6 @@ class SeedCategoriesTableTableSeeder extends Seeder
                 'category' => $category
             ]);
         }
-
-
         // $this->call("OthersTableSeeder");
     }
 }

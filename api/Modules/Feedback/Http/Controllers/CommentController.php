@@ -30,7 +30,7 @@ class CommentController extends Controller
     {
         $result = Comment::select('comment', 'id', 'created_at', 'user_id')->where([
             ['shop_id', '=', $shop_id]
-        ])->with('replies')->get();
+        ])->with('users')->with('replies')->get();
         // $result = Comment::where('id',1)->users->get();
 
         //     if (sizeOf($result) === 0) {
