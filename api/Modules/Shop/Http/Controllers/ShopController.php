@@ -14,10 +14,19 @@ use Modules\Shop\Http\Requests\CreateShopRequest;
 class ShopController extends Controller
 {
 
+    public function imageSubmit(Request $request)
+    {
+        $shop_name = "name";
+        // $shop_name =$request->shop_name;
+        $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+        $request->image->move(public_path($shop_name . '/images'), $imageName);
+        return response()->json(['success' => 'You have successfully upload image.']);
+    }
+
     public function createShop(CreateShopRequest $request)
     {
-        // $user = auth()->user()->id;
-        $user_id=auth()->user()->id;
+
+        $user_id = auth()->user()->id;
         // dd($user_id);
         // try {
         //     if (Shop::count() < 32) {
@@ -38,7 +47,7 @@ class ShopController extends Controller
         // } catch (ExceptionMessage $e) {
         //     return response()->json($e);
         // }
-        $user_id=auth()->user()->id;
+        $user_id = auth()->user()->id;
         $result = Shop::create([
             'name' => $request->name,
             'user_id' => $user_id,
@@ -49,7 +58,7 @@ class ShopController extends Controller
             'phone1' => $request->phone1,
             'phone2' => $request->phone2,
             'logo' => $request->name,
-            'website' => $request->website   
+            'website' => $request->website
         ]);
         if (!$result) {
             return response()->json('Failed');

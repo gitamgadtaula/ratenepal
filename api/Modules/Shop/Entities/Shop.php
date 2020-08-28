@@ -12,6 +12,10 @@ class Shop extends Model
     'website', 'description', 'email', 'location', 'phone1', 'phone2', 'logo', 'user_id'
   ];
 
+  public function images()
+  {
+    return $this->hasOne(\Modules\Shop\Entities\Image::class);
+  }
   public function ratings()
   {
     return $this->hasMany(\Modules\Feedback\Entities\Rating::class);
