@@ -1,8 +1,17 @@
 <template>
   <div class="container">
     <img src="@/assets/shops/shop-icon.png" style="width:100px;" />
+
     <h2>Create a shop</h2>
-    <a-form-model :model="form" :rules="rules" ref="shopForm">
+    <a-steps :current="current">
+      <a-step status title="Shop Information">
+        <a-icon slot="icon" type="user" />
+      </a-step>
+      <a-step status title="Shop Assets">
+        <a-icon slot="icon" type="solution" />
+      </a-step>
+    </a-steps>
+    <a-form-model :model="form" :rules="rules" ref="shopForm" v-if="current===0">
       <a-row type="flex" justify="start" :gutter="12">
         <a-col :span="12">
           <a-form-model-item label="Shop Name" prop="name">
@@ -49,10 +58,27 @@
           </a-form-model-item>
         </a-col>
       </a-row>
+      <a-button type="primary" @click="onSubmit">
+        Create a new shop
+        <a-icon type="double-right"></a-icon>
+      </a-button>
     </a-form-model>
-    <a-button type="primary" @click="onSubmit">
-      Create a new shop
-    </a-button>
+
+    <div class="assets" v-if="current===1">
+      <br />Choose your display picture:
+      <br />
+      <input type="file" class="form-control" @change="onImageChange" />
+      <br />
+      <br />
+      <a-button @click="formSubmit">
+        Upload
+        <a-icon type="upload" />
+      </a-button>
+      <a-button type="primary" @click="onSubmit">
+        Finish
+        <a-icon type="check"></a-icon>
+      </a-button>
+    </div>
   </div>
 </template>
 
@@ -60,6 +86,8 @@
 export default {
   data() {
     return {
+      current: 0,
+      image: "",
       form: {
         motto: "My motto",
         description: "My description",
@@ -68,7 +96,7 @@ export default {
         phone2: "98989898",
         website: "www.google.com",
         location: "Galaxy",
-        email:'shop@email.com'
+        email: "shop@email.com",
       },
 
       rules: {
@@ -76,16 +104,15 @@ export default {
         location: [{ required: true }],
         motto: [{ required: true }],
         description: [{ required: true }],
-        phone1: [{ required: true},
-        ],
-        website: [{ required: true }]
-      }
+        phone1: [{ required: true }],
+        website: [{ required: true }],
+      },
     };
   },
   methods: {
     handleChange(info) {},
     onSubmit() {
-      this.$refs.shopForm.validate(valid => {
+      this.$refs.shopForm.validate((valid) => {
         if (valid) {
           this.createShop();
         } else {
@@ -97,16 +124,38 @@ export default {
     createShop() {
       this.$axios
         .post("/shop/create", this.form)
-        .then(response => {
+        .then((response) => {
           console.log(response);
+          this.current++;
           this.$message.success("Shop created Successfully", 4);
-          this.$router.push("/");
+          // this.$router.push("/");
         })
-        .catch(error => {
+        .catch((error) => {
           this.$message.error("Failed creating shop", 4);
         });
-    }
-  }
+    },
+    onImageChange(e) {
+      console.log(e.target.files[0]);
+      this.image = e.target.files[0];
+    },
+    formSubmit() {
+      const config = {
+        headers: { "content-type": "multipart/form-data" },
+      };
+      let formData = new FormData();
+      formData.append("image", this.image);
+      this.$axios
+        .post("/image", formData, config)
+        .then((response) => {
+          console.log(response);
+          // currentObj.success = response.data.success;
+          this.$message.success("uploaded successfully");
+        })
+        .catch(function (error) {
+          console.log(error); // currentObj.output = error;
+        });
+    },
+  },
 };
 </script>
 

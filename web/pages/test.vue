@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <a-row type="flex" justify="start" :gutter="12">
+    <input type="file" class="form-control" v-on:change="onImageChange" />
+    <button @click="formSubmit">kjaghk</button>
+    <!-- <a-row type="flex" justify="start" :gutter="12">
       <a-col :span="10">
         <div class="carousel">
           <Carousel />
@@ -56,7 +58,7 @@
       <a-col :span="24">
         <Comment :shopId="shopId" :shopOwnerId="shop.user_id"/>
       </a-col>
-    </a-row>
+    </a-row>-->
   </div>
 </template>
 
@@ -73,6 +75,11 @@ export default {
       shopId: 1,
       shop: "",
       responseDidLoad: false,
+      name: "",
+
+      image: "",
+
+      success: "",
     };
   },
   methods: {
@@ -81,6 +88,32 @@ export default {
         this.shop = response.data;
         this.responseDidLoad = true;
       });
+    },
+    onImageChange(e) {
+      console.log(e.target.files[0]);
+
+      this.image = e.target.files[0];
+    },
+
+    formSubmit(e) {
+      e.preventDefault();
+
+      let currentObj = this;
+
+      const config = {
+        headers: { "content-type": "multipart/form-data" },
+      };
+      let formData = new FormData();
+      formData.append("image", this.image);
+      this.$axios
+        .post("/image", formData, config)
+        .then(function (response) {
+          // currentObj.success = response.data.success;
+          alert("done");
+        })
+        .catch(function (error) {
+          console.log(error); // currentObj.output = error;
+        });
     },
   },
   created() {
