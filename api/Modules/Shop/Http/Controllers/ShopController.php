@@ -21,6 +21,7 @@ class ShopController extends Controller
         $shop_name = $request->shop_name;
         $image = $request->image;
         $imageName = time() . '.' . $request->image->getClientOriginalExtension();
+        //each image of shop is stored in public/assets/<shopname>/images
         $image->move(public_path('/assets' . $shop_name . '/images'), $imageName);
         $imagePath = $shop_name . '/images/' . $imageName;
 
