@@ -1,6 +1,11 @@
 <template>
   <div class="container">
-    <input type="file" class="form-control" v-on:change="onImageChange" />
+    <a-upload name="file" :multiple="true" @change="handleChange">
+      <a-button>
+        <a-icon type="upload" />Click to Upload
+      </a-button>
+    </a-upload>
+    <!-- <input type="file" class="form-control" v-on:change="onImageChange" /> -->
     <button @click="formSubmit">kjaghk</button>
     <!-- <a-row type="flex" justify="start" :gutter="12">
       <a-col :span="10">
@@ -76,13 +81,24 @@ export default {
       shop: "",
       responseDidLoad: false,
       name: "",
-
       image: "",
-
-      success: "",
+      info: "",
     };
   },
   methods: {
+    handleChange(info) {
+      this.info = info;
+      // this.image = info.target.files[0];
+      if (info.file.status !== "uploading") {
+        console.log("file: " + info.file, "fileList: " + info.fileList);
+        this.image = info.fileList[0].originFileObj;
+      }
+      if (info.file.status === "done") {
+        this.$message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === "error") {
+        this.$message.error(`${info.file.name} file upload failed.`);
+      }
+    },
     getshop() {
       this.$axios.get(`/shop/${this.shopId}`).then((response) => {
         this.shop = response.data;
@@ -91,7 +107,6 @@ export default {
     },
     onImageChange(e) {
       console.log(e.target.files[0]);
-
       this.image = e.target.files[0];
     },
 

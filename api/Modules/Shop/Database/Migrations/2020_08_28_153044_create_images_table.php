@@ -16,11 +16,11 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('shop_id')->unsigned();
-            $table->string('main_img')->nullable();
-            $table->string('img1')->nullable();
-            $table->string('img2')->nullable();
-            $table->string('img3')->nullable();
-            $table->string('img4')->nullable();
+            $table->string('main_img')->nullable()->default('/images/dp.png');
+            $table->string('img1')->nullable()->default('/images/dummy.png');
+            $table->string('img2')->nullable()->default('/images/dummy.png');
+            $table->string('img3')->nullable()->default('/images/dummy.png');
+            $table->string('img4')->nullable()->default('/images/dummy.png');
             $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
             $table->timestamps();
         });
