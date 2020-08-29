@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Shop\Entities\Shop;
+use Modules\Shop\Entities\Image;
 use Modules\Feedback\Entities\Rating;
 use PHPUnit\Framework\Constraint\ExceptionMessage;
 use Modules\Shop\Http\Requests\CreateShopRequest;
@@ -16,11 +17,19 @@ class ShopController extends Controller
 
     public function imageSubmit(Request $request)
     {
-        $shop_name = "name";
-        // $shop_name =$request->shop_name;
+        $shop_id = 1;
+        $shop_name = $request->shop_name;
+        $image = $request->image;
         $imageName = time() . '.' . $request->image->getClientOriginalExtension();
-        $request->image->move(public_path($shop_name . '/images'), $imageName);
-        return response()->json(['success' => 'You have successfully upload image.']);
+        $image->move(public_path('/assets' . $shop_name . '/images'), $imageName);
+        $imagePath = $shop_name . '/images/' . $imageName;
+
+        if (Image::create([
+            'main_img' => $imagePath,
+            'shop_id' => $shop_id
+        ])) {
+            return response()->json(['success' => 'You have successfully uploaded the image.']);
+        }
     }
 
     public function createShop(CreateShopRequest $request)

@@ -87,24 +87,19 @@ export default {
   },
   methods: {
     handleChange(info) {
-      this.info = info;
+      // this.info = info;
       // this.image = info.target.files[0];
       if (info.file.status !== "uploading") {
         console.log("file: " + info.file, "fileList: " + info.fileList);
-        this.image = info.fileList[0].originFileObj;
+        // this.image = info.fileList[0].originFileObj;
       }
       if (info.file.status === "done") {
-        this.$message.success(`${info.file.name} file uploaded successfully`);
+        this.image = info.fileList[0].originFileObj;
       } else if (info.file.status === "error") {
         this.$message.error(`${info.file.name} file upload failed.`);
       }
     },
-    getshop() {
-      this.$axios.get(`/shop/${this.shopId}`).then((response) => {
-        this.shop = response.data;
-        this.responseDidLoad = true;
-      });
-    },
+
     onImageChange(e) {
       console.log(e.target.files[0]);
       this.image = e.target.files[0];
@@ -120,11 +115,14 @@ export default {
       };
       let formData = new FormData();
       formData.append("image", this.image);
+      formData.append('name','myshop')
+      console.log(formData);
+      // const req = { image: this.image };
       this.$axios
         .post("/image", formData, config)
         .then(function (response) {
           // currentObj.success = response.data.success;
-          alert("done");
+          this.$message.success(`${info.file.name} file uploaded successfully`);
         })
         .catch(function (error) {
           console.log(error); // currentObj.output = error;
@@ -132,7 +130,7 @@ export default {
     },
   },
   created() {
-    this.getshop();
+    // this.getshop();
   },
 };
 </script>

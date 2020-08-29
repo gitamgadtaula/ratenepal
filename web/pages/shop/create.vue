@@ -67,10 +67,15 @@
     <div class="assets" v-if="current===1">
       <br />Choose your display picture:
       <br />
-      <input type="file" class="form-control" @change="onImageChange" />
+      <!-- <input type="file" class="form-control" @change="onImageChange" /> -->
+      <a-upload name="file" :multiple="true" @change="onImageChange">
+        <a-button>
+          <a-icon type="upload" />Click to Upload
+        </a-button>
+      </a-upload>
       <br />
       <br />
-      <a-button @click="formSubmit">
+      <a-button @click="imageSubmit">
         Upload
         <a-icon type="upload" />
       </a-button>
@@ -86,8 +91,9 @@
 export default {
   data() {
     return {
-      current: 0,
+      current: 1,
       image: "",
+      imageName: "",
       form: {
         motto: "My motto",
         description: "My description",
@@ -134,20 +140,33 @@ export default {
           this.$message.error("Failed creating shop", 4);
         });
     },
-    onImageChange(e) {
-      console.log(e.target.files[0]);
-      this.image = e.target.files[0];
+    onImageChange(info) {
+      if (info.file.status !== "uploading") {
+        this.imageName = info.fileList[0].name;
+      }
+      if (info.file.status === "done") {
+        this.image = info.fileList[0].originFileObj;
+      } else if (info.file.status === "error") {
+        this.$message.error(`${info.file.name} file upload failed.`);
+      }
     },
-    formSubmit() {
-      const config = {
-        headers: { "content-type": "multipart/form-data" },
-      };
+    imageSubmit() {
+      // const config = {
+      //   headers: { "content-type": "multipart/form-data" },
+      // };
       let formData = new FormData();
       formData.append("image", this.image);
+      formData.append("shop_name", this.form.name);
+      console.log(formData);
+      const req = {
+        name: this.form.name,
+        image: this.image,
+        imageName: this.imageName,
+      };
       this.$axios
-        .post("/image", formData, config)
+        .post("/image", formData)
         .then((response) => {
-          console.log(response);
+          console.log(response.data);
           // currentObj.success = response.data.success;
           this.$message.success("uploaded successfully");
         })
@@ -160,9 +179,9 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  /* background-image: url("~@/assets/shops/shop-icon.png"); */
-}
+/* .container {
+  background-image: url("~@/assets/shops/shop-icon.png");
+} */
 .ant-input {
   width: 90%;
   /* border-radius: 8px; */
