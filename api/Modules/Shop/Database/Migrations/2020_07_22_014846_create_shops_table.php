@@ -26,7 +26,7 @@ class CreateShopsTable extends Migration
             $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('email');
-            $table->string('logo')->nullable();
+            $table->string('logo')->nullable()->default('/default/dp.png');
             $table->timestamps();
         });
     }

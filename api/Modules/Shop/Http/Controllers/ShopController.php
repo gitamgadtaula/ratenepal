@@ -35,29 +35,14 @@ class ShopController extends Controller
 
     public function createShop(CreateShopRequest $request)
     {
+        //change the request class to createshopRequest
+        $user_id = auth()->user()->id;
+        $image = $request->logo;
+        $imageName = time() . '.' . $request->logo->getClientOriginalExtension();
+        //each image of shop is stored in public/assets/<shopname>/images
+        $image->move(public_path('/assets/' . $request->name . '/images'), $imageName);
+        $imagePath = $request->name . '/images/' . $imageName;
 
-        $user_id = auth()->user()->id;
-        // dd($user_id);
-        // try {
-        //     if (Shop::count() < 32) {
-        //         //A user can only post 2 shops
-        //         $input = $request->all();
-        //         $user = auth()->user->id;
-        //         if ($result = Shop::create($input)) {
-        //             return response()->json([
-        //                 'status' => 'done',
-        //                 'msg' => 'A new shop has been succesfully created',
-        //                 'data' => $result
-        //             ]);
-        //         }
-        //     } else {
-        //         return response()
-        //         ->json(['msg' => 'sorry, You already have reached max limit:2']);
-        //     }
-        // } catch (ExceptionMessage $e) {
-        //     return response()->json($e);
-        // }
-        $user_id = auth()->user()->id;
         $result = Shop::create([
             'name' => $request->name,
             'user_id' => $user_id,
@@ -67,17 +52,18 @@ class ShopController extends Controller
             'location' => $request->location,
             'phone1' => $request->phone1,
             'phone2' => $request->phone2,
-            'logo' => $request->name,
+            'logo' => $imagePath,
             'website' => $request->website
         ]);
         if (!$result) {
             return response()->json('Failed');
+        } else {
+            return response()->json([
+                'status' => 'done',
+                'msg' => 'A new shop has been succesfully created',
+                'data' => $result
+            ]);
         }
-        return response()->json([
-            'status' => 'done',
-            'msg' => 'A new shop has been succesfully created',
-            'data' => $result
-        ]);
     }
     public function fetchShop()
     {

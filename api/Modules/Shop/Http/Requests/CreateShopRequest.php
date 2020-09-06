@@ -1,6 +1,7 @@
 <?php
 
 namespace Modules\Shop\Http\Requests;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateShopRequest extends FormRequest
@@ -13,13 +14,15 @@ class CreateShopRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:50',
+            'name' => 'required|max:50|unique:shops',
             'motto' => 'string',
             'website' => 'required',
             'description' => 'required',
             'location' => 'required',
-            'email'=>'required',
-            'phone1' => 'required'
+            'email' => 'required',
+            'phone1' => 'required',
+            'logo' => 'required'
+
         ];
     }
 

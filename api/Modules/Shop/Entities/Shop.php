@@ -9,7 +9,7 @@ class Shop extends Model
 {
   protected $fillable = [
     'name', 'motto',
-    'website', 'description', 'email', 'location', 'phone1', 'phone2', 'logo', 'user_id'
+    'website', 'description', 'email', 'location', 'phone1', 'phone2', 'logo', 'user_id','main_img'
   ];
 
   public function images()

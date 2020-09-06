@@ -16,7 +16,7 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('shop_id')->unsigned();
-            $table->string('main_img')->nullable()->default('/default/dp.png');
+            // $table->string('main_img')->nullable()->default('/default/dp.png');
             $table->string('img1')->nullable()->default('/default/dummy.png');
             $table->string('img2')->nullable()->default('/default/dummy.png');
             $table->string('img3')->nullable()->default('/default/dummy.png');

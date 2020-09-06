@@ -11,68 +11,79 @@
         <a-icon slot="icon" type="solution" />
       </a-step>
     </a-steps>
-    <a-form-model :model="form" :rules="rules" ref="shopForm" v-if="current===0">
-      <a-row type="flex" justify="start" :gutter="12">
-        <a-col :span="12">
-          <a-form-model-item label="Shop Name" prop="name">
-            <a-input v-model="form.name" />
-          </a-form-model-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-model-item label="Shop Motto" prop="motto">
-            <a-input v-model="form.motto" />
-          </a-form-model-item>
-        </a-col>
-      </a-row>
+    <a-spin :spinning="responseIsloading">
+      <a-form-model :model="form" :rules="rules" ref="shopForm" v-if="current===0">
+        <a-row type="flex" justify="start" :gutter="12">
+          <a-col :span="12">
+            <a-form-model-item label="Shop Name" prop="name">
+              <a-input v-model="form.name" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="Shop Motto" prop="motto">
+              <a-input v-model="form.motto" />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
 
-      <a-row type="flex" justify="start" :gutter="12">
-        <a-col :span="12">
-          <a-form-model-item label="Shop Website" prop="website">
-            <a-input v-model="form.website" />
-          </a-form-model-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-model-item label="Shop Location" prop="location">
-            <a-input v-model="form.location" />
-          </a-form-model-item>
-        </a-col>
-      </a-row>
+        <a-row type="flex" justify="start" :gutter="12">
+          <a-col :span="12">
+            <a-form-model-item label="Shop Website" prop="website">
+              <a-input v-model="form.website" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="Shop Location" prop="location">
+              <a-input v-model="form.location" />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
 
-      <a-row type="flex" justify="start" :gutter="12">
-        <a-col :span="12">
-          <a-form-model-item label="Primary Phone" prop="phone1">
-            <a-input v-model="form.phone1" />
-          </a-form-model-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-model-item label="Secondary Phone">
-            <a-input v-model="form.phone2" />
-          </a-form-model-item>
-        </a-col>
-      </a-row>
+        <a-row type="flex" justify="start" :gutter="12">
+          <a-col :span="12">
+            <a-form-model-item label="Primary Phone" prop="phone1">
+              <a-input v-model="form.phone1" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="Secondary Phone">
+              <a-input v-model="form.phone2" />
+            </a-form-model-item>
+          </a-col>
+        </a-row>
 
-      <a-row type="flex" justify="start" :gutter="12">
-        <a-col :span="12">
-          <a-form-model-item label="Shop Description" prop="description">
-            <a-input v-model="form.description" />
-          </a-form-model-item>
-        </a-col>
-      </a-row>
-      <a-button type="primary" @click="onSubmit">
-        Create a new shop
-        <a-icon type="double-right"></a-icon>
-      </a-button>
-    </a-form-model>
+        <a-row type="flex" justify="start" :gutter="12">
+          <a-col :span="12">
+            <a-form-model-item label="Shop Description" prop="description">
+              <a-input v-model="form.description" />
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-model-item label="Shop Logo" prop="image">
+              <a-upload name="file" :multiple="false" @change="onImageChange">
+                <a-button>
+                  <a-icon type="upload" />Click to Upload
+                </a-button>
+              </a-upload>
+            </a-form-model-item>
+          </a-col>
+        </a-row>
+        <a-button type="primary" @click="onSubmit">
+          Create a new shop
+          <a-icon type="double-right"></a-icon>
+        </a-button>
+      </a-form-model>
+    </a-spin>
 
     <div class="assets" v-if="current===1">
       <br />Choose your display picture:
       <br />
       <!-- <input type="file" class="form-control" @change="onImageChange" /> -->
-      <a-upload name="file" :multiple="true" @change="onImageChange">
+      <!-- <a-upload name="file" :multiple="true" @change="onImageChange">
         <a-button>
           <a-icon type="upload" />Click to Upload
         </a-button>
-      </a-upload>
+      </a-upload>-->
       <br />
       <br />
       <a-button @click="imageSubmit">
@@ -91,7 +102,8 @@
 export default {
   data() {
     return {
-      current: 1,
+      responseIsloading: false,
+      current: 0,
       image: "",
       imageName: "",
       form: {
@@ -103,6 +115,7 @@ export default {
         website: "www.google.com",
         location: "Galaxy",
         email: "shop@email.com",
+        image: "",
       },
 
       rules: {
@@ -112,6 +125,7 @@ export default {
         description: [{ required: true }],
         phone1: [{ required: true }],
         website: [{ required: true }],
+        image: [{ required: true }],
       },
     };
   },
@@ -128,24 +142,37 @@ export default {
       });
     },
     createShop() {
+      this.responseIsloading = true;
+      const fd = new FormData();
+      fd.append("name", this.form.name);
+      fd.append("motto", this.form.motto);
+      fd.append("website", this.form.website);
+      fd.append("location", this.form.location);
+      fd.append("description", this.form.description);
+      fd.append("email", this.form.email);
+      fd.append("phone1", this.form.phone1);
+      fd.append("phone2", this.form.phone2);
+      fd.append("logo", this.form.image);
       this.$axios
-        .post("/shop/create", this.form)
+        .post("/shop/create", fd)
         .then((response) => {
-          console.log(response);
-          this.current++;
+          console.log(response.data);
+          // this.current++;
           this.$message.success("Shop created Successfully", 4);
-          // this.$router.push("/");
+          this.responseIsloading = false;
         })
         .catch((error) => {
           this.$message.error("Failed creating shop", 4);
+          this.responseIsloading = false;
         });
     },
     onImageChange(info) {
       if (info.file.status !== "uploading") {
-        this.imageName = info.fileList[0].name;
+        // this.imageName = info.fileList[0].name;
       }
       if (info.file.status === "done") {
-        this.image = info.fileList[0].originFileObj;
+        // this.image = info.fileList[0].originFileObj;
+        this.form.image = info.fileList[0].originFileObj;
       } else if (info.file.status === "error") {
         this.$message.error(`${info.file.name} file upload failed.`);
       }
@@ -158,11 +185,7 @@ export default {
       formData.append("image", this.image);
       formData.append("shop_name", this.form.name);
       console.log(formData);
-      const req = {
-        name: this.form.name,
-        image: this.image,
-        imageName: this.imageName,
-      };
+
       this.$axios
         .post("/image", formData)
         .then((response) => {
