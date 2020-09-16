@@ -15,6 +15,7 @@
     <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
       <img alt="example" style="width: 100%" :src="previewImage" />
     </a-modal>
+    <button @click="sendImage">Submit</button>
   </div>
 </template>
 
@@ -47,7 +48,6 @@ export default {
       this.previewVisible = false;
     },
     async handlePreview(file) {
-     
       if (!file.url && !file.preview) {
         file.preview = await getBase64(file.originFileObj);
       }
@@ -55,10 +55,19 @@ export default {
       this.previewVisible = true;
     },
     handleChange({ fileList }) {
-       if (fileList.size > 300) {
-        this.$message.error("Limit size exceeded");
-      }
       this.fileList = fileList;
+    },
+    sendImage() {
+      const fd = new FormData();
+      fd.append("shop_name", "My shop 123");
+      fd.append("shop_id", 27);
+      fd.append("img1", this.fileList[0].originFileObj);
+      fd.append("img2", this.fileList[1].originFileObj);
+      // fd.append("img3", this.fileList[2].originFileObj);
+      // fd.append("img4", this.fileList[3].originFileObj);
+      this.$axios.post("/shop/assets", fd).then((response) => {
+        this.$message.success("success");
+      });
     },
   },
   created() {},

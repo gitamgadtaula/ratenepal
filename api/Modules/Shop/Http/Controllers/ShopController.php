@@ -40,8 +40,8 @@ class ShopController extends Controller
         $image = $request->logo;
         $imageName = time() . '.' . $request->logo->getClientOriginalExtension();
         //each image of shop is stored in public/assets/<shopname>/images
-        $image->move(public_path('/assets/' . $request->name . '/images'), $imageName);
-        $imagePath = $request->name . '/images/' . $imageName;
+        $image->move(public_path('/assets/' . $request->name . '/logo'), $imageName);
+        $imagePath = $request->name . '/logo/' . $imageName;
 
         $result = Shop::create([
             'name' => $request->name,
@@ -65,6 +65,36 @@ class ShopController extends Controller
             ]);
         }
     }
+    public function assetsHandler(Request $request)
+    {
+
+        $user_id = auth()->user()->id;
+        $img1 = $request->img1;
+        $img2 = $request->img2;
+        $img3 = $request->img3;
+        $img4 = $request->img4;
+        $shop_id = $request->shop_id;
+        function storeImage($req, $shop_name, $db_col, $shop_id)
+        {
+            $img = $req;
+
+            $imgName = time() . '.' . $req->getClientOriginalExtension();
+            //each image of shop is stored in public/assets/<shopname>/images
+            $img->move(public_path('/assets/' . $shop_name . '/images'), $imgName);
+            $imagePath = $shop_name . '/logo/' . $imgName;
+            $image = Image::firstOrCreate(['shop_id' => $shop_id]);
+            $image->shop_id = $shop_id;
+            $image->$db_col = $imagePath;
+            $image->save();
+           
+        }
+        storeImage($img1, $request->shop_name, 'img1', $shop_id);
+        storeImage($img2, $request->shop_name, 'img2', $shop_id);
+        // $this->storeImage($img3, $request->shop_name);
+        // $this->storeImage($img4, $request->shop_name);
+        return response()->json(['msg' => 'success']);
+    }
+
     public function fetchShop()
     {
         try {

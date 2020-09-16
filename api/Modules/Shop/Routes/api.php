@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/shop', function (Request $request) {
 Route::group(['prefix' => 'shop',  'middleware' => 'auth'], function () {
     //All the routes that belongs to the group goes here
     Route::post('create', 'ShopController@createShop');
+    Route::post('assets','ShopController@assetsHandler');
 });
 Route::get('shop/getall', 'ShopController@fetchShop');
 Route::get('shop/{shop_id}', 'ShopController@fetchShopById');
