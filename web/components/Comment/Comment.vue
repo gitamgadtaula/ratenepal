@@ -31,46 +31,55 @@
       </span>
       <user-rating-in-comment v-else :shopId="shopId" :userId="item.user_id" />
       <a-row type="flex" justify="space-between">
-        <a-col :span="18">
+        <a-col>
           <p>
             <i>" {{ item.comment }} "</i>
           </p>
-          <a-button
-            type="link"
-            :icon="replyStatus[index]?'up':'down'"
-            @click="toggleReply(index)"
-            ghost
-          >
-            <span v-if="replyStatus[index]">Hide Replies</span>
-            <span v-else>Show Replies</span>
-          </a-button>
-          <transition name="fade">
-            <section class="reply" v-if="replyStatus[index]">
-              <input
-                type="text"
-                placeholder="Reply to this comment"
-                v-model="reply[item.id]"
-                class="reply-input"
-                @keyup.enter="postReply(item.id)"
-              />
-              <div v-for="(reply,index2) in item.replies" :key="index2">
-                <user-pop-info :userId="reply.user_id" style="width:30%;" class="reply-user" />
-                <a-row type="flex" justify="space-between">
-                  <a-col :span="20">
-                    <i style="margin-left:60px;">"{{reply.reply}}"</i>
-                  </a-col>
-                  <a-col :span="4">
-                    <p class="date">{{ reply.created_at | moment("from", "now") }}</p>
-                  </a-col>
-                </a-row>
-              </div>
-            </section>
-          </transition>
         </a-col>
-        <a-col :span="4" style="text-align:right;">
+        <a-col style="text-align:right;">
           <p class="date">{{ item.created_at | moment("from", "now") }}</p>
         </a-col>
       </a-row>
+      <a-button
+        type="link"
+        :icon="replyStatus[index]?'up':'down'"
+        @click="toggleReply(index)"
+        ghost
+      >
+        <span v-if="replyStatus[index]">Hide Replies</span>
+        <span v-else>Show Replies</span>
+      </a-button>
+      <transition name="fade">
+        <section class="reply" v-if="replyStatus[index]">
+          <div v-for="(reply,index2) in item.replies" :key="index2">
+            <user-pop-info :userId="reply.user_id" style="width:30%;" class="reply-user" />
+            <span v-if="isShopOwnerComment(reply.user_id)">
+              <a-icon type="crown" />&nbsp;Owner
+            </span>
+            <user-rating-in-comment v-else :shopId="shopId" :userId="reply.user_id" />
+            <a-row type="flex" justify="space-between">
+              <a-col>
+                <i>"{{reply.reply}}"</i>
+              </a-col>
+              <a-col>
+                <p class="date">{{ reply.created_at | moment("from", "now") }}</p>
+              </a-col>
+            </a-row>
+          </div>
+          <input
+            type="text"
+            placeholder="Reply to this comment"
+            v-model="reply[item.id]"
+            class="reply-input"
+            @keyup.enter="postReply(item.id)"
+          />
+        </section>
+      </transition>
+      <!-- </a-col>
+        <a-col :span="4" style="text-align:right;">
+          <p class="date">{{ item.created_at | moment("from", "now") }}</p>
+        </a-col>
+      </a-row>-->
     </div>
   </div>
 </template>
@@ -93,27 +102,9 @@ export default {
   },
   methods: {
     toggleReply(index) {
-      // index == this.showReply.status
-      //   ? (this.showReply.stauts = null)
-      //   : (this.showReply.status = index);
-
       this.$set(this.replyStatus, index, !this.replyStatus[index]);
-      console.log(this.replyStatus);
-      // if (!this.replyStatus[index]) {
-      //   this.showreply[item.id].icon = "down";
-      //   this.showreply[item.id].msg = "Show Reply";
-      // } else {
-      //   this.showreply[item.id].icon = "up";
-      //   this.showreply[item.id].msg = "Hide Reply";
-      // }
-      // if (this.showReply.status === index) {
-      //   this.showReply.icon = "up";
-      //   this.showReply.msg = "Hide Replies";
-      // } else {
-      //   this.showReply.icon = "down";
-      //   this.showReply.msg = "Show Replies";
-      // }
-      console.log(this.showReply);
+      // console.log(this.replyStatus);
+      // console.log(this.showReply);
     },
     fetchComments() {
       this.$axios.get(`/comment/get/${this.shopId}`).then((response) => {
@@ -180,7 +171,7 @@ export default {
 }
 .reply {
   margin-left: 20px;
-  margin-right: 20px;
+  /* margin-right: 20px; */
   transition: all 0.4s ease-in-out;
 }
 .reply-input {
