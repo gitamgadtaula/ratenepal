@@ -35,11 +35,19 @@
           <p>
             <i>" {{ item.comment }} "</i>
           </p>
-          <a-button type="down" :icon="showReply.icon" @click="toggleReply(index)" ghost>Show reply</a-button>
+          <a-button
+            type="link"
+            :icon="replyStatus[index]?'up':'down'"
+            @click="toggleReply(index)"
+            ghost
+          >
+            <span v-if="replyStatus[index]">Hide Replies</span>
+            <span v-else>Show Replies</span>
+          </a-button>
           <transition name="fade">
             <section class="reply" v-if="replyStatus[index]">
-              {{reply[item.id]}}, {{index}}
-              <a-input
+              <input
+                type="text"
                 placeholder="Reply to this comment"
                 v-model="reply[item.id]"
                 class="reply-input"
@@ -48,10 +56,12 @@
               <div v-for="(reply,index2) in item.replies" :key="index2">
                 <user-pop-info :userId="reply.user_id" style="width:30%;" class="reply-user" />
                 <a-row type="flex" justify="space-between">
-                  <a-col>
+                  <a-col :span="20">
                     <i style="margin-left:60px;">"{{reply.reply}}"</i>
                   </a-col>
-                  <a-col>{{ reply.created_at | moment("from", "now") }}</a-col>
+                  <a-col :span="4">
+                    <p class="date">{{ reply.created_at | moment("from", "now") }}</p>
+                  </a-col>
                 </a-row>
               </div>
             </section>
@@ -157,12 +167,16 @@ export default {
 .comment {
   padding: 10px;
   padding-bottom: 10px;
-  background-color: #c3073f;
+  /* background-color: #c3073f; */
+  background-color: #dc243e;
+  background-image: linear-gradient(62deg, #dc243e 0%, #8821e9 100%);
+
   border-radius: 6px;
   color: white;
   border-bottom: 1px solid #eeeeee;
   margin-top: 4px;
-  box-shadow: 3px 4px 4px rgba(213, 211, 211, 0.25);
+  /* box-shadow: 3px 4px 4px rgba(213, 211, 211, 0.25); */
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 .reply {
   margin-left: 20px;
@@ -173,16 +187,16 @@ export default {
   border-radius: 0px;
   border: 0px;
   outline: 0px;
-  border-bottom: 2px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
   padding: 12px 4px;
-  background-color: #c3073f;
+  background-color: inherit;
   margin-bottom: 4px;
 }
 .reply-user img {
   width: 30px !important;
   height: 30px !important;
 }
-.reply-input > ant-input:focus {
+.reply-input:focus {
   border: 0;
   outline: 0;
 }
@@ -191,5 +205,12 @@ export default {
   font-weight: 100;
   color: white;
   font-style: italic;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

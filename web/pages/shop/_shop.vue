@@ -27,6 +27,7 @@ export default {
   display: block;
   min-height: 100vh;
   padding: 10px;
+  
 }
 .title-container {
   margin-top: 5px;
