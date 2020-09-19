@@ -29,7 +29,7 @@
             <a-menu slot="overlay">
               <a-menu-item key="0">
                 <nuxt-link to="/profile">
-                  <a-icon type="user" />My Profile
+                  <a-icon type="user" />&nbsp;My Profile
                 </nuxt-link>
               </a-menu-item>
               <a-menu-item key="1" @click="logout">

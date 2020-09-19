@@ -37,6 +37,7 @@
 
 <script>
 // import baseURL from "@/components/baseURL";
+import getRating from "@/filters/getRating";
 export default {
   auth: true,
   data() {
@@ -59,15 +60,7 @@ export default {
   },
 
   filters: {
-    getRating(value) {
-      console.log(value);
-      const length = value.length;
-      if (length === 0) {
-        return "not rated yet";
-      }
-      const sum = value.reduce((acc, item) => acc + item.rating, 0);
-      return (sum / length).toFixed(1); //round upto 2 decimal
-    },
+    getRating,
   },
   created() {
     this.getAllShop();

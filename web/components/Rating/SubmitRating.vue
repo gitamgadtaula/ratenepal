@@ -1,14 +1,18 @@
 <template>
   <div class="container">
     <span v-if="isShopOwner">
-      <a-icon type="crown" />Shop Owner !
+      <a-icon type="crown" />&nbsp; Owner !
     </span>
     <span v-else>
       <div v-if="didRateAlready">
-        
-          <!-- <p>Your Rating :</p>  -->
-          <a-rate style="font-size:32px;margin:0px;" character="*" v-model="userRatingOnShop.rating.rating" disabled />
-        
+        <!-- <p>Your Rating :</p>  -->
+        <a-rate
+          style="font-size:32px;margin:0px;"
+          character="*"
+          v-model="userRatingOnShop.rating.rating"
+          disabled
+        />
+
         <!-- <a-rate v-model="userRatingOnShop.rating.rating" disabled allow-half /> -->
       </div>
       <div v-else>

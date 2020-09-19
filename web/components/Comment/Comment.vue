@@ -27,7 +27,8 @@
         </a-col>
       </a-row>
       <span v-if="isShopOwnerComment(item.user_id)">
-        <a-icon type="crown" />&nbsp;Owner
+        <a-icon type="crown" />&nbsp;
+        <span style="font-size:10px;">Owner</span>
       </span>
       <user-rating-in-comment v-else :shopId="shopId" :userId="item.user_id" />
       <a-row type="flex" justify="space-between">
@@ -52,9 +53,14 @@
       <transition name="fade">
         <section class="reply" v-if="replyStatus[index]">
           <div v-for="(reply,index2) in item.replies" :key="index2">
-            <user-pop-info :userId="reply.user_id" style="width:30%;" class="reply-user" />
+            <user-pop-info
+              :userId="reply.user_id"
+              style="width:30%;font-size:11px;"
+              class="reply-user"
+            />
             <span v-if="isShopOwnerComment(reply.user_id)">
-              <a-icon type="crown" />&nbsp;Owner
+              <a-icon type="crown" />&nbsp;
+              <span style="font-size:10px;">Owner</span>
             </span>
             <user-rating-in-comment v-else :shopId="shopId" :userId="reply.user_id" />
             <a-row type="flex" justify="space-between">
